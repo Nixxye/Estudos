@@ -1,0 +1,1 @@
+Exercício sobre diagramas de estado: elabore um diagrama de estados referente ao ciclo de vida de um arquivo que faz parte de um projeto armazenado no github. Os comandos git devem causar transições neste diagrama. Não há necessidade de entregar, é só uma sugestão para estudo.

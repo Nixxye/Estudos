@@ -1,0 +1,11 @@
+__MACOSX/
+._*
+.DS_Store
+Thumbs.db
+*.zip
+*.tmp
+*.bak
+~$*
+.vscode/
+*.uvguix.*
+*.asv
