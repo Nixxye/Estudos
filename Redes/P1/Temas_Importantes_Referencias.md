@@ -14,8 +14,11 @@ Para cada tema: **explicação** + **de onde veio** (ex.: *P13 Q8 · PO14 Q6 · 
 |---|---|
 | **P13** | Prova 1 — 20/12/2013 (`provas/prova1-2013.pdf`) |
 | **PO14** | Prova oral — 25/08/2014 (`provas/provaOral2014.pdf`) |
-| **P15** | 2ª avaliação — 1º sem. 2015 (`provas/prova2-2015.pdf`) |
-| **LP** | Lista de questões de provas anteriores (`provas/Lista de questões…pdf`) |
+| **P15** | 2ª avaliação — **1º semestre** de 2015 (`provas/prova2-2015.pdf`) |
+| **P15b** | 2ª avaliação — **2º semestre** de 2015 (`provas/prova2-2o2015.docx`) — **prova nova** |
+| **LP** (= **P18**) | Lista de questões de provas anteriores (`provas/Lista de questões…pdf`). O arquivo **`provas/provas2018.pdf`** traz **exatamente as mesmas 13 questões** ("Questões de provas passadas"); por isso tudo o que está marcado **LP** vale também como **P18**. Quer dizer que esta lista ainda circulava como material de revisão em **2018**. |
+| **PR1** | **Prova recente (fotos)**: P1 corrigida à mão, questões 1–8 (TCP × UDP, P2P, porta, threads, congestionamento, fluxo, rwnd × cwnd, gráfico de `cwnd`). Sem data; as notas e correções nas margens ajudam a inferir o gabarito. |
+| **PR2** | **Prova recente (relato + manuscrito)**: temas relatados (SPF/DKIM/DMARC, piggybacking, DNS raiz iterativo, C‑S × P2P, ACK, V/F) + folha manuscrita com as questões 5, 6 e 7 (`P1-redes.pdf`). |
 | **LR** | Lista de exercícios (revisão) — rdt (`Lista de exercícios (revisão).pdf`) |
 | **TT** | Tarefa: questões TCP (`questoes-TCP.pdf`) |
 | **WS** | Wireshark Lab TCP v8.0 |
@@ -28,24 +31,65 @@ Para cada tema: **explicação** + **de onde veio** (ex.: *P13 Q8 · PO14 Q6 · 
 
 Marque ✔ nas fontes onde o tema aparece. **Quanto mais ✔ nas provas, mais certo de cair.**
 
-| # | Tema | P13 | PO14 | P15 | LP | LR | TT | WS | Slides que destacam |
-|---|---|---|---|---|---|---|---|---|---|
-| T1 | IP + porta identifica processo | Q1 | Q1 | Q3 | Q10 | | | | A2 s.10 |
-| T2 | Cliente × servidor | | | Q2 | Q9 | | | | A2 s.9 |
-| T3 | Apps ↔ protocolos ↔ TCP/UDP | Q3 | Q2 | Q1, Q4 | Q6 | | | | A2 s.16, A4 s.5 |
-| T4 | Por que TCP **e** UDP; por que UDP existe | | | Q4 | Q3, Q4, Q8 | | | | A2 s.15, A4 s.5/12–13 |
-| T5 | Sockets: UDP 1 × TCP 2 (n+1); servidor antes | Q5, Q6 | Q3, Q4 | Q5 | Q5 | | | | A3 s.49, A4 s.9–11 |
-| T6 | Demultiplexação (UDP × TCP), portas invertidas | Q7 | | Q5, Q6 | Q13 | | | | A4 s.8–11 |
-| T7 | HTTP (funcionamento, persistente) | Q4 | Q9 | | Q11 | | | | A2 s.19–30 |
-| T8 | DNS | | Q10 | | Q12 | | | | A3 s.19–29 |
-| T9 | rdt: bit alternante, GBN, SR; seq e timers | Q11 | | | Q7 | **todo** | | | A4 s.16–39 |
-| T10 | TCP em linhas gerais; handshake | Q2 | Q5 | | | | | Q4–Q5 | A5 s.3–5, 27–31 |
-| T11 | **Cálculo de seq/ACK**, diagrama com ACK perdido | Q9 | | Q8 | | | **Q1, Q4** | Q6–Q8 | A5 s.6–9, 17–21 |
-| T12 | **V/F do TCP** (rwnd, SampleRTT, ACK, ssthresh) | Q8 | | Q7 | | | Q3 | | A5 s.4, 10–12, 25; A6 s.13 |
-| T13 | **Controle de fluxo** | Q10 | Q6 | Q9 | | | Q2, Q5 | Q9 | A5 s.23–26 |
-| T14 | **Controle de congestionamento** (SS, CA, perdas) | Q10, Q12 | Q7, Q8 | Q9 | | | Q5, Q6 | Q13 | A6 s.11–14 |
-| T15 | RTT, EstimatedRTT, Timeout | Q8 (V/F) | | Q7d | | | Q3 | Q7 | A5 s.10–13 |
-| T16 | Handshaking: objetivo | Q2 | | | | | | | A5 s.27–29 |
+| # | Tema | P13 | PO14 | P15 | **P15b** | LP = P18 | LR | TT | WS | Slides que destacam |
+|---|---|---|---|---|---|---|---|---|---|---|
+| T1 | IP + porta identifica processo | Q1 | Q1 | Q3 | | Q10 | | | | A2 s.10 |
+| T2 | Cliente × servidor | | | Q2 | | Q9 | | | | A2 s.9 |
+| T3 | Apps ↔ protocolos ↔ TCP/UDP | Q3 | Q2 | Q1, Q4 | **Q1** | Q6 | | | | A2 s.16, A4 s.5 |
+| T4 | Por que TCP **e** UDP; por que UDP existe | | | Q4 | **Q3** | Q3, Q4, Q8 | | | | A2 s.15, A4 s.5/12–13 |
+| T5 | Sockets: UDP 1 × TCP 2 (n+1 sockets, mesma porta); servidor antes | Q5, Q6 | Q3, Q4 | Q5 | | Q5 | | | | A3 s.49, A4 s.9–11 |
+| T6 | Demultiplexação (UDP × TCP), portas invertidas | Q7 | | Q5, Q6 | **Q5b** | Q13 | | | | A4 s.8–11 |
+| T7 | HTTP (funcionamento, persistente) | Q4 | Q9 | | | Q11 | | | | A2 s.19–30 |
+| T8 | DNS | | Q10 | | | Q12 | | | | A3 s.19–29 |
+| T9 | rdt: bit alternante, GBN, SR; seq e timers | Q11 | | | **Q2** | Q7 | **todo** | | | A4 s.16–39 |
+| T10 | TCP em linhas gerais; handshake | Q2 | Q5 | | | | | | Q4–Q5 | A5 s.3–5, 27–31 |
+| T11 | **Cálculo de seq/ACK**, diagrama com ACK perdido | Q9 | | Q8 | **Q5** | | | **Q1, Q4** | Q6–Q8 | A5 s.6–9, 17–21 |
+| T12 | **V/F do TCP** (rwnd, SampleRTT, ACK, ssthresh) | Q8 | | Q7 | **Q4** | | | Q3 | | A5 s.4, 10–12, 25; A6 s.12–13 |
+| T13 | **Controle de fluxo** | Q10 | Q6 | Q9 | **Q6** | | | Q2, Q5 | Q9 | A5 s.23–26 |
+| T14 | **Controle de congestionamento** (SS, CA, perdas) | Q10, Q12 | Q7, Q8 | Q9 | **Q6, Q7** | | | Q5, Q6 | Q13 | A6 s.11–14 |
+| T15 | RTT, EstimatedRTT, Timeout | Q8 (V/F) | | Q7d | | | | Q3 | Q7 | A5 s.10–13 |
+| T16 | Handshaking: objetivo | Q2 | | | | | | | | A5 s.27–29 |
+| T17 | Objetivo do protocolo de **aplicação** e do de **transporte** | | | | | Q1, Q2 | | | | A2 s.12; A4 s.4 |
+| T18 | Por que **seq** e **timers** no rdt | Q11 | | | **Q2** | Q7 | **LR** | | | A4 s.20–25 |
+| T19 | UDP para o desenvolvedor (por que escolher UDP) | | | Q4 | **Q3** | Q4, Q8 | | | | A4 s.12–13 |
+| T20 | **Slow start × rwnd** (slow start controla `cwnd`, não `rwnd`) | | | | **Q4e** | | | | | A6 s.12; A5 s.4 |
+| T21 | TCP **ocioso** (reusar `cwnd`/`ssthresh`?) | | | | **Q7** | | | **Q6** | | A6 s.12–13 |
+
+**O que a prova de 2018 acrescenta:** `provas2018.pdf` é a **mesma lista de 13 questões** (a coluna **LP = P18**). Não traz tema novo, mas **confirma que, em 2018, o professor continuava cobrando/recomendando estes temas**: objetivo dos protocolos de aplicação e de transporte, por que TCP e UDP, por que o UDP existe, sockets (1 × 2, n+1), seq e timers no rdt, UDP × TCP para o desenvolvedor, cliente × servidor, IP+porta, HTTP, DNS e o demux UDP. Os mesmos temas se repetem de 2013 a 2018 → **são os de maior retorno de estudo**.
+
+**O que a prova de 2º semestre de 2015 (P15b) acrescenta:** é uma **recombinação de perguntas já conhecidas**, o que mostra o padrão de montagem do professor:
+- **Q1, Q2, Q3** vêm quase literalmente da lista (LP Q6, Q7, Q8; aqui com "3 aplicações").
+- **Q4 (V/F, 2 pts):** quatro itens idênticos aos da P15 Q7 (ACK sem dados, `rwnd` varia, bytes não reconhecidos ≤ buffer, seq 40 + 4 B ⇒ ACK 44) e **um item novo**: *"o slow start controla o tamanho do `rwnd`"* → **Falso** (controla a `cwnd`). O item do SampleRTT **não** aparece desta vez.
+- **Q5:** os **mesmos números** da P15 Q8 (127, 70 e 50 B; ACKs 197 e 247; 127 se invertido) — só mudam as **portas** (3022 → 1234).
+- **Q6** = fluxo × congestionamento "incluindo todas as fases" (igual a TT Q5). **Q7** = TCP ocioso (igual a TT Q6).
+Ou seja, **todas as perguntas desta prova já estavam nas listas e provas anteriores** — reforça que estudar os temas T3, T4, T9/T18, T11, T12, T13, T14 e T21 cobre praticamente tudo.
+
+### Placar das provas recentes (PR1 e PR2)
+| Tema | PR1 (fotos) | PR2 (relato/manuscrito) |
+|---|---|---|
+| T22 Características TCP × UDP (classificar 0/1) | **Q1** (10 itens) | — |
+| T23 TCP × UDP em P2P (V/F) | **Q2** | — |
+| T24 Função da porta | **Q3** | — |
+| T25 Multithreading em servidores | **Q4** | — |
+| T26 SPF / DKIM / DMARC | — | **associação** |
+| T27 Piggybacking | — | **V/F** |
+| T28 Ler gráfico de `cwnd` | **Q8** (2 pts) | — |
+| T29 `rwnd` × `cwnd` (qual limita) | **Q5 (item 4), Q7** | — |
+| T30 Cliente‑servidor × P2P (cálculo/argumento) | — | **15 000 "gigas", 1000 clientes** |
+| T31 DNS: raiz iterativa | — | **questão escrita** |
+| T11 ACK a partir de seq e bytes | — | **questão clássica** (500 B a partir de 1000 → ACK 1500) |
+| T12 V/F do TCP (várias) | **Q5, Q6** | **V/F clássicos** |
+| T13 Controle de fluxo | **Q6** | (no item do ACK) |
+| T14 Controle de congestionamento | **Q5, Q8** | — |
+
+**O que as provas recentes mostram**
+1. **Mudança de estilo:** mais **múltipla escolha e V/F** (afirmações para julgar) e **leitura de gráfico**, além das discursivas curtas (DNS, P2P, ACK). Os **conceitos são os mesmos** de 2013–2018.
+2. **Cuidado com a redação:** "reduz o limiar pela metade" (PR1 Q5 item 3) é **verdadeiro** quando se refere ao **`cwnd` no momento da perda**; "metade do **seu valor anterior**" (P13 Q8e) é **falso**. **Leia a frase inteira.**
+3. **`cwnd` e `rwnd` são independentes** (PR1 Q5 item 4 é **falso**); a janela efetiva é o **mínimo** (PR1 Q7).
+4. **`rwnd = 0` ⇒ transmissor para** (PR1 Q6 item 4, **V**), mesmo havendo sondas de 1 byte.
+5. **Timeout × 3 ACKs duplicados no gráfico** (PR1 Q8.2a): queda **grande** não é timeout; **timeout = volta a 1** e reinicia o slow start.
+6. **O `ssthresh` só muda nas perdas** (PR1 Q8.3); nunca "duplica" em slow start (isso é a `cwnd`).
+7. Questões dissertativas recentes: **DNS** (raiz iterativa + cache), **C‑S × P2P** (fórmulas) e **ACK** (+ controle de fluxo) — todas já preparadas (**Parte J** do Gabarito).
 
 **Leitura rápida:** os temas **T11–T14** (seq/ACK, V/F do TCP, fluxo, congestionamento) aparecem em *todas* as provas e na tarefa — são o coração da P1. **T1, T3, T5** (identificação de processo, apps vs transporte, sockets) são a "parte de teoria curta" que se repete quase literalmente.
 
@@ -72,7 +116,7 @@ Marque ✔ nas fontes onde o tema aparece. **Quanto mais ✔ nas provas, mais ce
 - **Referências:** **LP Q3, Q4, Q8 · P15 Q4**. **Slide A4 s.5** (TCP × UDP), **s.12–13** ("Por que usar o UDP?"), **A2 s.15**.
 - **Contexto moderno** (slide, não caiu em prova): QUIC/HTTP‑3 roda sobre UDP (**A4 s.12; A6 s.23–28**).
 
-### T5. Sockets: UDP 1 porta × TCP 2 (n+1); servidor precisa subir antes
+### T5. Sockets: UDP 1 × TCP 2 (n+1 **sockets**, mesma porta do servidor); servidor precisa subir antes
 - **Explicação:**
   - **UDP:** um socket só, identificado por (IP, porta destino); atende qualquer cliente. O cliente pode rodar antes do servidor (o datagrama só se perde).
   - **TCP:** **socket de boas‑vindas** (`listen`) + **um socket de conexão por cliente** (criado pelo `accept`). Com n conexões ⇒ **n+1**. Todos usam a **mesma porta** do servidor; diferenciam‑se pela quádrupla. O servidor precisa estar rodando **antes** para o `connect()` (SYN) ter quem aceite.
@@ -116,13 +160,13 @@ As mesmas cinco aparecem em **P13 Q8**, **TT Q3** e (com pequena variação) **P
 
 | Afirmação | Gabarito | Por quê (curto) | Fontes |
 |---|---|---|---|
-| Bytes não reconhecidos ≤ buffer de recepção | **V** | `LastByteSent − LastByteAcked ≤ rwnd ≤ RcvBuffer` | P13 Q8a · TT Q3a · P15 Q7c · A5 s.25 |
+| Bytes não reconhecidos ≤ buffer de recepção | **V** | `LastByteSent − LastByteAcked ≤ rwnd ≤ RcvBuffer` | P13 Q8a · TT Q3a · P15 Q7c · **P15b Q4c** · A5 s.25 |
 | Segmento TCP tem campo para RcvWindow | **V** | `rwnd`, 16 bits, no cabeçalho | P13 Q8b · TT Q3b · A5 s.5 |
 | Último SampleRTT = 1 s ⇒ Timeout ≥ 1 s | **V** (⚠️ prova no Gabarito, P13 Q8c) | `Timeout = E' + 3D + |1−E| ≥ 1` | P13 Q8c · TT Q3c · P15 Q7d · A5 s.10–12 |
-| Seq 38 + 4 B ⇒ ACK do mesmo segmento = 42 | **F** | ACK refere‑se à outra direção; 42 é o ACK de B ao receber | P13 Q8d · TT Q3d · P15 Q7e · A5 s.6 |
+| Seq 38 + 4 B ⇒ ACK do mesmo segmento = 42 | **F** | ACK refere‑se à outra direção; 42 é o ACK de B ao receber | P13 Q8d · TT Q3d · P15 Q7e · **P15b Q4d** · A5 s.6 |
 | Timeout ⇒ threshold = metade do **valor anterior** | **F** | `ssthresh = cwnd/2` (cwnd no momento da perda), `cwnd = 1` | P13 Q8e · TT Q3e · A6 s.13 |
-| (só P15 Q7a) B sem dados não manda ACK | **F** | manda ACK só‑de‑ACK | P15 Q7a · A5 s.20 |
-| (só P15 Q7b) rwnd nunca muda | **F** | `rwnd = RcvBuffer − dados no buffer` | P15 Q7b · A5 s.25 |
+| (só P15 Q7a) B sem dados não manda ACK | **F** | manda ACK só‑de‑ACK | P15 Q7a · **P15b Q4a** · A5 s.20 |
+| (só P15 Q7b) rwnd nunca muda | **F** | `rwnd = RcvBuffer − dados no buffer` | P15 Q7b · **P15b Q4b** · A5 s.25 |
 
 ### T13. ⭐ Controle de fluxo
 - **Explicação:** protege o **receptor** (buffer). Receptor calcula `rwnd = RcvBuffer − (LastByteRcvd − LastByteRead)` e o põe no cabeçalho de **todo** segmento; remetente mantém bytes em voo ≤ rwnd; `rwnd = 0` ⇒ sondas de 1 byte. Serviço **fim‑a‑fim**.
@@ -140,6 +184,56 @@ As mesmas cinco aparecem em **P13 Q8**, **TT Q3** e (com pequena variação) **P
 
 ### T16. Handshaking e "por que 3 vias"
 - Ver T10. **P13 Q2 · A5 s.27–29**.
+
+### T20. "O slow start controla o tamanho do `rwnd`" (V/F novo da P15b)
+- **Explicação:** **Falso.** O slow start é uma fase do **controle de congestionamento** e controla a **`cwnd`** (janela de congestionamento, calculada pelo **remetente**). O **`rwnd`** é do **controle de fluxo**, calculado pelo **receptor** (`RcvBuffer − dados no buffer`) e anunciado no cabeçalho. Eles se combinam em `min(cwnd, rwnd)`, mas são independentes: o slow start nunca altera o `rwnd`.
+- **Referências:** **P15b Q4 (item e)**. **Slides A5 s.4** ("Controle de Fluxo (protege o receptor) × Controle de Congestionamento (protege a rede)"), **A6 s.12** (slow start dobra a `cwnd`).
+
+### T21. TCP ocioso entre t1 e t2: reutilizar `cwnd` e `ssthresh`?
+- **Explicação:** **Vantagem:** se a rede não mudou, a conexão retoma a taxa alta imediatamente. **Desvantagem:** depois de um longo silêncio a rede pode ter mudado e os ACKs que "cronometram" o envio pararam; enviar de uma vez uma janela grande gera uma **rajada** que pode causar congestionamento e perdas. **Alternativa:** manter o `ssthresh` (memória da capacidade) e **reiniciar `cwnd` pequeno** (1 MSS ou janela inicial), fazendo slow start até o `ssthresh` e depois congestion avoidance.
+- **Referências:** **P15b Q7 · TT Q6**. Slides **A6 s.12–13**.
+
+---
+
+### T22. Características de **TCP × UDP** (classificar itens em 0/1)
+- **Explicação:** a prova recente traz **10 afirmações em pares** (handshake, confiabilidade, controle de fluxo/congestionamento, stream × datagrama, integridade × latência). **TCP:** 3 vias, seq/ACK, `rwnd` e `cwnd`, **fluxo de bytes** (sem fronteiras), e‑mail/HTTP/FTP. **UDP:** sem conexão, best‑effort, **aplicação cuida de tudo**, **preserva fronteiras** (1 `sendto` = 1 datagrama), DNS/streaming/jogos.
+- **Referências:** **PR1 Q1**. Slides **A2 s.15–16**, **A4 s.5, s.12–13**, **A5 s.3**, **A3 s.50** (TCP não preserva fronteiras). Gabarito **Parte I, Q1**.
+
+### T23. **TCP × UDP em P2P** (V/F)
+- **Explicação:** **BitTorrent** → **TCP** (integridade dos blocos sem reimplementar retransmissão). **Tempo real** → **UDP** (latência > entrega total). **TCP em P2P** tem overhead de conexão/congestionamento e **atrapalha a travessia de NAT**. **UDP não tem controle de fluxo integrado** (isso é do TCP).
+- **Referências:** **PR1 Q2**. Slides **A3 s.8, s.37** (conexões TCP entre peers; desafio NAT). Gabarito **Parte I, Q2**.
+
+### T24. **Função da porta**
+- **Explicação:** identificar o **processo/socket** de destino no host (o IP identifica o host). Base da multiplexação/demultiplexação.
+- **Referências:** **PR1 Q3** (+ T1). Slides **A2 s.10**, **A4 s.6**. Gabarito **Parte I, Q3**.
+
+### T25. **Multithreading em servidores** (TCP e UDP)
+- **Explicação:** TCP: thread principal em `accept()` + **uma thread por conexão**. UDP: um socket, threads processam datagramas em paralelo (fila). O objetivo é **responsividade e paralelismo**, **não** garantir ordem (isso é do TCP no kernel).
+- **Referências:** **PR1 Q4**. Slides **A3 s.49–51** (welcoming × connection socket), **A4 s.11** (servidores concorrentes). Gabarito **Parte I, Q4**.
+
+### T26. **SPF, DKIM e DMARC**
+- **Explicação:** **SPF** = lista de IPs/servidores autorizados (TXT no DNS); **DKIM** = assinatura digital, chave pública no DNS (integridade); **DMARC** = política (none/quarantine/reject) com base em SPF+DKIM. Mnemônico: **S**ervidores · **D**igital · **D**ecisão.
+- **Referências:** **PR2 (associação SPF/DKIM/DMARC)**. Slides **A3 s.17–18**. Gabarito **Parte J, J1**.
+
+### T27. **Piggybacking**
+- **Explicação:** ACK **de carona** num segmento de dados do sentido contrário. **Não é obrigatório**: sem dados, o TCP manda **ACK puro**. Não existe no UDP. Pode se beneficiar do **ACK atrasado** (até 500 ms).
+- **Referências:** **PR2 (V/F)**, **P15 Q7a, P15b Q4a** (ACK sem dados). Slides **A5 s.9** (Telnet), **s.20**. Gabarito **Parte J, J2**.
+
+### T28. **Ler o gráfico de `cwnd`** (Reno)
+- **Explicação:** subida **exponencial** = slow start; **linear** = CA; **queda a 1** = **timeout**; **queda à metade** (sem voltar a 1) = **3 ACKs duplicados**; `ssthresh = cwnd/2` da `cwnd` **antes** da queda e **só muda nas perdas**; slow start termina quando `cwnd` atinge `ssthresh`. Na PR1: SS 1–6 e 23–26; CA 6–16 e 17–22; perda na 16 = 3 dups; `ssthresh` na 18 = 21; perda na 22 = timeout; fim da 26 com 3 dups ⇒ `ssthresh = 4`, `cwnd = 4`.
+- **Referências:** **PR1 Q8** (2 pts; erros mais comuns: confundir queda grande com timeout; achar que `ssthresh` cresce; **dobrar** em vez de dividir). Slides **A6 s.11–14**. Gabarito **Parte I, Q8**; Transporte_do_Zero **§9.2.16**.
+
+### T29. **`rwnd` × `cwnd`: qual limita e para quê**
+- **Explicação:** janela efetiva = **`min(cwnd, rwnd)`**; o **menor** limita. `cwnd` → evita **congestionar a rede**; `rwnd` → evita **estourar o buffer do receptor**. A `cwnd` **não** é limitada pela `rwnd` (são independentes). Ex.: rwnd = 32, cwnd = 22 ⇒ **22**, limitado pela **`cwnd`** (congestionamento).
+- **Referências:** **PR1 Q5 (item 4: F), Q7**. Slides **A5 s.4**. Gabarito **Parte I, Q5/Q7**.
+
+### T30. **Cliente‑servidor × P2P (por que um colapsa e o outro escala)**
+- **Explicação:** `D_cs = max{N·F/u_s, F/d_min}` cresce **linearmente com N**; `D_p2p = max{F/u_s, F/d_min, N·F/(u_s+Σuᵢ)}` **estabiliza** (cada peer traz oferta). Exemplo: F = 15 Gb, N = 1000: **138,8 h × 12,6 h**; F = 15 GB: **1111 h × 101 h** (atenção a GB × Gb).
+- **Referências:** **PR2 (15 000 "gigas" para 1000 clientes)**. Slides **A3 s.32–35** ("Veredito da Escalabilidade"). Gabarito **Parte J, J4**.
+
+### T31. **DNS: iterativo na raiz**
+- **Explicação:** a raiz **não resolve** (recursão desativada); **devolve referência** ao TLD; o **DNS local** faz as consultas seguintes (TLD → autoritativo) e usa **cache/TTL**. Motivo: carga mundial e DDoS.
+- **Referências:** **PR2 (escrita)**; reforça **PO14 Q10 · LP Q12**. Slides **A3 s.22, s.25–27**. Gabarito **Parte J, J3**; DNS_a_Fundo §7.
 
 ---
 

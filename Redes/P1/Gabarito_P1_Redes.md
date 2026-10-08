@@ -1,6 +1,6 @@
 # Redes 1 — Gabarito comentado (P1)
 
-Cobre **todos** os arquivos de `Exercícios/`: lista de revisão (rdt), lista de provas anteriores, Prova 1 (2013), Prova oral (2014), 2ª avaliação (2015), Tarefa TCP e Wireshark Lab.
+Cobre **todos** os arquivos de `Exercícios/`: lista de revisão (rdt), lista de provas anteriores (inclui `provas2018.pdf`, que repete as mesmas 13 questões), Prova 1 (2013), Prova oral (2014), 2ª avaliação do 1º semestre de 2015 (`prova2-2015.pdf`), 2ª avaliação do **2º semestre de 2015** (`prova2-2o2015.docx`), Tarefa TCP, Wireshark Lab e as **provas recentes** (PR1: fotos corrigidas; PR2: temas relatados + respostas manuscritas).
 
 ## Como estudar com este arquivo
 Cada questão tem a mesma estrutura:
@@ -17,12 +17,15 @@ As perguntas **abertas que se repetem** (HTTP, DNS, TCP, fluxo × congestionamen
 ## Índice
 - Parte A — Respostas desenvolvidas (A1 HTTP · A2 DNS · A3 TCP · A4 Fluxo × Congestionamento · A5 Slow start × CA · A6 rdt/GBN/SR · A7 IP+porta · A8 TCP × UDP · A9 Sockets TCP/UDP)
 - Parte B — Lista de revisão (rdt)
-- Parte C — Lista de questões de provas anteriores
+- Parte C — Lista de questões de provas anteriores (= prova de 2018)
 - Parte D — Prova 1 (20/12/2013)
 - Parte E — Prova oral (25/08/2014)
-- Parte F — 2ª avaliação (2015)
+- Parte F — 2ª avaliação (1º semestre de 2015)
+- Parte F2 — 2ª avaliação (**2º semestre de 2015**, prova nova)
 - Parte G — Tarefa TCP
 - Parte H — Wireshark Lab TCP
+- Parte I — Prova recente **PR1** (fotos corrigidas: TCP × UDP, P2P, porta, threads, congestionamento, fluxo, rwnd × cwnd, gráfico de cwnd)
+- Parte J — Prova recente **PR2** (SPF/DKIM/DMARC, piggybacking, DNS raiz iterativo, C‑S × P2P, ACK)
 
 ---
 
@@ -269,7 +272,27 @@ Com N = 1 no GBN: 1 pacote em voo, 1 timer, ACK cumulativo = ACK do único pacot
 
 ---
 
-# PARTE C — Lista de questões de provas anteriores
+# PARTE C — Lista de questões de provas anteriores (= `provas2018.pdf`)
+
+> **Sobre o arquivo `provas2018.pdf`:** ele contém **1 página com as mesmas 13 questões** desta lista ("Questões de provas passadas", mesmo enunciado, mesma ordem). Ou seja, em 2018 o professor ainda usava esta lista como **material de revisão para a prova**. Isso mostra que estas 13 perguntas **continuaram valendo** e é a pista mais recente que temos de como a prova é montada. Não há questões novas: as respostas desta Parte C cobrem o arquivo de 2018 por inteiro.
+
+### Mapa de recorrência: onde cada questão da lista já caiu em prova
+| Questão da lista (= 2018) | Tema | Apareceu em prova |
+|---|---|---|
+| Q1 | objetivo do protocolo de aplicação | só na lista |
+| Q2 | objetivo do protocolo de transporte | só na lista |
+| Q3 | por que TCP **e** UDP | só na lista (relacionada à P15 Q4) |
+| Q4 | por que o UDP existe | só na lista |
+| **Q5** | servidor UDP 1 × TCP 2 (n+1) | **P13 Q5 · PO14 Q3** (idêntica) |
+| **Q6** | listar aplicações e protocolos | **P15 Q1** (5 aplicações) · relacionada a P13 Q3, PO14 Q2 |
+| Q7 | seq e timers no rdt | só na lista (relacionada a P13 Q11) |
+| Q8 | por que UDP em vez de TCP | só na lista (relacionada a P15 Q4) |
+| **Q9** | cliente × servidor | **P15 Q2** |
+| **Q10** | o que identifica um processo | **P13 Q1 · PO14 Q1 · P15 Q3** (idêntica nas três) |
+| **Q11** | como funciona o HTTP | **PO14 Q9** (idêntica) |
+| **Q12** | como funciona o DNS | **PO14 Q10** (idêntica) |
+| **Q13** | UDP: mesmo socket para A e B | relacionada a P15 Q5/Q6 (demux) |
+**Leitura:** as questões em **negrito** já foram cobradas literalmente em provas; as demais são "teoria curta" do mesmo estilo, com chance real de aparecer. Treine as 13.
 
 ### Q1. Objetivo de um protocolo de camada de aplicação
 **Testa:** distinguir *aplicação* de *protocolo de aplicação*.
@@ -349,7 +372,13 @@ Com N = 1 no GBN: 1 pacote em voo, 1 timer, ACK cumulativo = ACK do único pacot
 **Resposta:** a persistente **com paralelismo (pipelining)** é a usada por padrão no **HTTP/1.1**.
 **Observação:** o pipelining tem *HoL blocking* (respostas na ordem das requisições), resolvido no HTTP/2 por multiplexação.
 
-### 5. (1,0) Servidor UDP com uma porta × servidor TCP com duas → **Parte C, Q5** (UDP: 1 socket; TCP: boas-vindas + conexão; n conexões ⇒ n+1).
+### 5. (1,0) Servidor UDP com uma porta × servidor TCP com duas
+**Resposta:** a pergunta fala em "portas", mas o que conta são **sockets**.
+- **UDP:** **1 socket** (sem conexão; recebe de qualquer cliente).
+- **TCP:** **2 sockets**: o de **boas‑vindas** (em `listen()`, só aceita pedidos de conexão) e o de **conexão** (criado pelo `accept()`, dedicado ao cliente).
+- Com **n conexões simultâneas** de n clientes diferentes: **n + 1 sockets** (1 de boas‑vindas + n de conexão).
+- ⚠️ **Todos esses sockets usam a MESMA porta do servidor** (ex.: 80): o servidor **não abre porta nova** por cliente. Handshake e dados vão para a porta 80; o que muda de cliente para cliente é a **porta de origem do cliente**, e o SO separa as conexões pela **quádrupla** (IP/porta origem + IP/porta destino).
+Detalhes em **Parte C, Q5**.
 
 ### 6. (0,5) Por que o servidor TCP deve rodar antes do cliente? E no UDP, o cliente pode rodar antes?
 **Raciocínio.** Compare o que cada cliente faz primeiro.
@@ -402,7 +431,7 @@ Perguntas orais: responda em **2–3 min**, com estrutura (definição → mecan
 
 1. **Identificação de processo:** **A7**.
 2. **Aplicações sobre TCP ou UDP?** **Prova 2013, Q3** — todas TCP, porque não toleram perda e precisam de ordem/confiabilidade.
-3. **Servidor UDP 1 porta × TCP 2:** **Parte C, Q5** (n+1).
+3. **Servidor UDP 1 porta × TCP 2:** **Parte C, Q5** — UDP: 1 socket; TCP: boas‑vindas + 1 por conexão (**n+1 sockets, todos na mesma porta do servidor**, separados pela quádrupla).
 4. **Servidor TCP antes do cliente / UDP não:** **Prova 2013, Q6**.
 5. **Funcionamento do TCP em linhas gerais:** **A3**. *Roteiro oral:* conexão (3-way) → numeração de bytes/ACK cumulativo → timer e retransmissão (timeout, 3 dups) → fluxo (rwnd) → congestionamento (cwnd) → fechamento (FIN).
 6. **Controle de fluxo no TCP:** **A4**, parte "Controle de fluxo em detalhe". *Roteiro:* problema (buffer do receptor) → rwnd = RcvBuffer − dados → vai no cabeçalho → remetente limita bytes em voo → rwnd=0 e sondas de 1 byte.
@@ -478,6 +507,134 @@ Perguntas orais: responda em **2–3 min**, com estrutura (definição → mecan
 
 ### 9. (2,0) Fluxo × congestionamento do TCP, detalhado → **A4** (com SS/CA em **A5**).
 *Dica para valer 2 pontos:* tabela comparativa + fluxo (fórmula do rwnd, sondas) + congestionamento (cwnd, ssthresh, SS, CA, 3 dups, timeout, min(cwnd, rwnd)).
+
+---
+
+# PARTE F2 — 2ª avaliação (**2º semestre de 2015**) · `prova2-2o2015.docx`
+
+> **Esta é uma prova diferente da Parte F** (que é a do **1º semestre** de 2015). Ela **recombina perguntas já vistas**: mesmo estilo e, em vários itens, mesmos números. Vale como mais uma confirmação do padrão do professor. Cada resposta abaixo está completa; use também os pontos de estudo indicados.
+> **Pontuação:** Q1 (1,0) · Q2 (1,0) · Q3 (1,0) · Q4 (2,0) · Q5 (2,0) · Q6 (2,0) · Q7 (1,0) = **10,0**.
+
+### 1. (1,0) Listar **3** aplicações de Internet não proprietárias e os protocolos de camada de aplicação usados por elas
+**O que testa:** conhecer o par **aplicação → protocolo** e a ideia de protocolo **aberto** (RFC).
+**Resposta:**
+| Aplicação | Protocolo de camada de aplicação | Transporte |
+|---|---|---|
+| Web (navegação) | **HTTP** | TCP (porta 80/443) |
+| Correio eletrônico | **SMTP** (envio), **POP3/IMAP** (leitura) | TCP |
+| Resolução de nomes | **DNS** | UDP (porta 53) |
+(Outras válidas: transferência de arquivos — FTP; acesso remoto seguro — SSH; compartilhamento P2P — BitTorrent; VoIP — SIP/RTP.)
+**Erro comum:** citar WhatsApp/Skype (**proprietários**) ou citar a aplicação sem o protocolo.
+**Estude:** Resumo §2.3 · Temas T3 · Gabarito Parte C Q6.
+
+### 2. (1,0) Por que precisamos de **números de sequência** e **temporizadores** nos protocolos rdt?
+**Raciocínio:** cada defeito do canal pede um mecanismo.
+- O **ACK/NAK pode se corromper** ou o remetente pode **retransmitir à toa** (timeout prematuro) → o receptor recebe **duplicatas** e não sabe se o pacote é novo ou repetido → **número de sequência** (no pare‑e‑espere bastam 0 e 1; com janelas, uma faixa maior; também permite **ordenar**).
+- Um **pacote ou um ACK pode se perder** e **ninguém avisa nada** → o remetente esperaria para sempre → **temporizador**: se o ACK não chega a tempo, **retransmite**.
+**Resposta:** os **números de sequência** permitem ao receptor distinguir um pacote **novo** de uma **retransmissão** (descartar duplicatas e reordenar); os **temporizadores** permitem ao remetente **detectar perdas** de pacotes ou de ACKs e retransmitir.
+**Estude:** Transporte_do_Zero §5.3, §5.5 · Temas T18 · Gabarito Parte C Q7.
+
+### 3. (1,0) Por que um desenvolvedor escolheria **UDP** em vez de **TCP**?
+**Resposta:**
+1. **Sem handshake** → sem o atraso de 1 RTT antes do primeiro dado (transação mais rápida).
+2. **Sem retransmissão/ordenação** → em voz, vídeo ao vivo e jogos um pacote atrasado perde a utilidade; esperar atrasa tudo.
+3. **Sem controle de congestionamento** → a aplicação controla a própria taxa (p. ex., taxa constante de mídia).
+4. **Sem estado de conexão** no servidor → atende muito mais clientes.
+5. **Cabeçalho pequeno** (8 B contra 20+ B).
+6. Se precisar de confiabilidade, a aplicação **implementa a sua própria** (ex.: DNS reenvia a consulta; QUIC).
+Exemplos: DNS, VoIP, streaming ao vivo, jogos, IoT, QUIC/HTTP‑3.
+**Contrapartida:** não há garantia de entrega; pode "atropelar" conexões TCP.
+**Estude:** Transporte_do_Zero §3 · Temas T4, T19 · Gabarito A8 e Parte C Q8.
+
+### 4. (2,0) Verdadeiro ou falso? Justifique se for falso
+**(a)** *"Host A envia um grande arquivo a B por TCP. B não tem dados para A, então B **não enviará confirmações** porque não pode incluí‑las nos pacotes de dados."* → **FALSO.**
+*Justificativa:* o *piggybacking* (ACK dentro de um segmento de dados) é uma **otimização, não uma exigência**. Sem dados para enviar, B manda **segmentos só de ACK** (sem payload): ACK atrasado (até 500 ms), um ACK cumulativo a cada 2 segmentos em ordem, ou ACK duplicado imediato se houver lacuna.
+
+**(b)** *"O tamanho do `rwnd` TCP nunca muda durante a conexão."* → **FALSO.**
+*Justificativa:* `rwnd = RcvBuffer − (dados que estão no buffer e ainda não foram lidos pela aplicação)`; varia conforme a aplicação lê, e é **reanunciado em cada segmento** (pode chegar a 0).
+
+**(c)** *"O número de bytes não reconhecidos que A envia não pode exceder o tamanho do buffer de recepção."* → **VERDADEIRO.**
+*Justificativa:* o controle de fluxo impõe `LastByteSent − LastByteAcked ≤ rwnd`, e `rwnd ≤ RcvBuffer`. Logo, os bytes em voo nunca superam o buffer do receptor.
+
+**(d)** *"Seq = 40 com 4 bytes de dados; no mesmo segmento o ACK é necessariamente 44."* → **FALSO.**
+*Justificativa:* o campo ACK de um segmento A→B confirma os bytes que **B enviou a A** (é o próximo byte esperado **de B**); não tem relação com `Seq + len` do próprio segmento. **44** é o ACK que **B** enviaria de volta ao receber esse segmento (40 + 4).
+
+**(e)** *"O mecanismo de slow start controla o tamanho do `rwnd`."* → **FALSO.** *(item novo desta prova)*
+*Justificativa:* o **slow start** faz parte do **controle de congestionamento** e controla a **`cwnd`** (janela de congestionamento), calculada pelo **remetente**. O **`rwnd`** pertence ao **controle de fluxo**, é calculado pelo **receptor** e anunciado no cabeçalho. Os dois se combinam na janela efetiva `min(cwnd, rwnd)`, mas o slow start **não altera** o `rwnd`.
+**Estude:** Transporte_do_Zero §7, §9 · Temas T12, T20 · Gabarito Prova 2013 Q8 / P15 Q7.
+
+### 5. (2,0) B recebeu até o byte 126. A envia 2 segmentos de **70** e **50** bytes; 1º: **seq 127**, porta de origem **3022**, porta de destino **1234**
+**Raciocínio‑base** (idêntico à P15 Q8; só as portas mudam): `próximo seq = seq + tamanho`; `ACK = próximo byte esperado`; **portas invertidas** na volta.
+| Segmento | Seq | Bytes | Bytes cobertos | Próximo seq |
+|---|---|---|---|---|
+| 1 | 127 | 70 | 127 – 196 | **197** |
+| 2 | 197 | 50 | 197 – 246 | **247** |
+
+**a)** Segundo segmento: **seq = 197**; porta de origem **3022**; porta de destino **1234**.
+**b)** ACK do 1º segmento (chega antes do 2º): **ACK = 197**; porta de origem **1234** (a do servidor); porta de destino **3022** (a do cliente).
+**c)** Se o 2º chega antes do 1º: B ainda espera o byte 127 → **ACK = 127** (ACK duplicado).
+**d)** Diagrama (chegam em ordem; **1º ACK perdido**; o **2º ACK chega depois do timeout** do 1º segmento):
+```
+   Host A (porta 3022)                             Host B (porta 1234)
+     |--- Seq=127, 70 bytes ------------------------>|  B: tem até 196 → ACK=197
+     |--- Seq=197, 50 bytes ------------------------>|  B: tem até 246 → ACK=247
+     |      X <----------- ACK=197 -----------------|  (PERDIDO)
+  TIMEOUT do seg 1 (ACK=247 ainda a caminho)         |
+     |--- Seq=127, 70 bytes  (retransmissão) ------>|
+     |<----------------- ACK=247 --------------------|  (cumulativo: confirma 127–246;
+     |  A: SendBase=247 → tudo confirmado            |   cancela o timer)
+     |                                               |  B recebe a duplicata (127–196):
+     |<----------------- ACK=247 --------------------|  descarta e reenvia ACK=247
+     |  A ignora (ACK duplicado, nada novo)          |
+```
+**O que desenhar:** segmentos **(127, 70 B)**, **(197, 50 B)** e a **retransmissão (127, 70 B)**; ACKs **197 (perdido)**, **247** e **247**.
+*(Se o ACK=247 chegasse **antes** do timeout, não haveria retransmissão — o ACK cumulativo cobre o ACK 197 perdido.)*
+**Estude:** Transporte_do_Zero §7–§8 · Resumo §8.1–8.2 · Temas T11.
+
+### 6. (2,0) Diferença entre controle de fluxo e de congestionamento do TCP; explique os dois métodos **em detalhes, incluindo todas as fases**
+**O que testa:** a pergunta mais repetida da disciplina (P13 Q10, PO14 Q6–Q8, P15 Q9, TT Q5, P15b Q6). Para valer 2 pontos, entregue: **tabela comparativa + fluxo + congestionamento com todas as fases**.
+
+**Tabela de diferenças**
+| | **Fluxo** | **Congestionamento** |
+|---|---|---|
+| Protege | o **receptor** (buffer) | a **rede** (roteadores) |
+| Variável | `rwnd` | `cwnd` (+ `ssthresh`) |
+| Quem calcula | o **receptor** e **avisa** no cabeçalho | o **remetente**, que **infere** (perda) |
+| Escopo | fim‑a‑fim remetente↔receptor | remetente↔rede |
+
+**Controle de fluxo (método):**
+1. O receptor tem `RcvBuffer`; a aplicação lê devagar → o buffer enche.
+2. Ele calcula `rwnd = RcvBuffer − (LastByteRcvd − LastByteRead)` e escreve em **todo** segmento enviado ao remetente.
+3. O remetente mantém `LastByteSent − LastByteAcked ≤ rwnd`.
+4. Com `rwnd = 0` o remetente **para** e envia **sondas de 1 byte** até receber um `rwnd` > 0 (evita travar).
+
+**Controle de congestionamento (método e **todas as fases**):**
+- Variáveis: `cwnd` (começa em 1 MSS) e `ssthresh`; janela efetiva `min(cwnd, rwnd)`; sinal = **perda** (timeout ou 3 ACKs duplicados).
+1. **Slow start:** `cwnd` +1 MSS por ACK → **dobra a cada RTT** (exponencial) enquanto `cwnd < ssthresh`.
+2. **Congestion avoidance:** ao atingir `ssthresh`, +1 MSS por RTT (**aumento aditivo**).
+3. **3 ACKs duplicados:** **fast retransmit** do segmento perdido; `ssthresh = cwnd/2`; `cwnd = ssthresh` (**fast recovery**, Reno); segue em congestion avoidance.
+4. **Timeout:** `ssthresh = cwnd/2`; `cwnd = 1 MSS`; **volta ao slow start**.
+5. (Tahoe: qualquer perda → `cwnd = 1`.) O conjunto é o **AIMD** (dente de serra).
+**Estude:** Transporte_do_Zero §9 (completo) · Gabarito A4, A5 · Temas T13, T14.
+
+### 7. (1,0) TCP ocioso entre t1 e t2: vantagens e desvantagens de usar `cwnd` e `ssthresh` de t1; que alternativa?
+**Raciocínio:** `cwnd` e `ssthresh` são "o que o TCP sabia da rede em t1". Depois de um longo silêncio, esse conhecimento pode estar **desatualizado**.
+- **Vantagem de reutilizar:** se a rede continua igual, a conexão **retoma imediatamente** uma taxa alta, sem repassar pelo slow start.
+- **Desvantagem:** a rede pode ter **mudado** (mais tráfego, outro caminho, menos banda), e os ACKs que "cadenciavam" o envio acabaram. Despejar de uma vez uma janela grande produz uma **rajada** que pode causar **congestionamento e perdas** para si e para os outros.
+- **Alternativa recomendada:** manter o **`ssthresh`** (memória da capacidade estimada) e **reiniciar `cwnd` com valor pequeno** (1 MSS ou janela inicial), fazendo **slow start** até o `ssthresh` e depois **congestion avoidance**. Re‑sonda a rede com segurança e ainda recupera rápido, pois o slow start é exponencial (*slow‑start restart after idle*, RFC 5681).
+**Estude:** Transporte_do_Zero §9.2.13 (E12) · Gabarito Tarefa TCP Q6.
+
+### Comparação rápida P15 (1º sem.) × P15b (2º sem.)
+| | P15 (1º sem.) | **P15b (2º sem.)** |
+|---|---|---|
+| Aplicações e protocolos | Q1 (5 apps) | **Q1 (3 apps)** |
+| Seq/timers no rdt | — | **Q2** |
+| UDP × TCP para o desenvolvedor | Q4 (transação rápida) | **Q3** |
+| IP + porta; cliente × servidor; socket por cliente; Fig. 3.5 | Q2, Q3, Q5, Q6 | — |
+| V/F do TCP | Q7 (5 itens, inclui SampleRTT) | **Q4 (5 itens, inclui slow start × rwnd)** |
+| Seq/ACK + diagrama | Q8 (portas 302 → 80) | **Q5 (portas 3022 → 1234)** |
+| Fluxo × congestionamento | Q9 | **Q6** |
+| TCP ocioso | — | **Q7** |
 
 ---
 
@@ -559,6 +716,196 @@ O lab usa o trace **`tcp-ethereal-trace-1`** (150 KB de *Alice no País das Mara
 | 12 | Vazão da conexão | `vazão = bytes transferidos / tempo`. Bytes = (seq do último ACK) − (seq do 1º byte); tempo = t(último ACK) − t(1º segmento). | ≈ 164 KB ÷ ≈ 5,5 s ≈ **30 KB/s** (≈ 0,24 Mbps) |
 | 13 | Slow start × congestion avoidance no gráfico Stevens | **Slow start:** no início, a quantidade de segmentos por *rajada* (degrau) dobra a cada RTT → curva convexa (exponencial). **Congestion avoidance:** depois o crescimento é aproximadamente linear (+1 segmento por RTT). Diferenças do ideal: ACKs atrasados fazem o SS crescer menos que 2×; o formato "degraus" é afetado pela taxa do link de acesso; o MSS/segmento nem sempre é cheio; e a fase de CA é irregular/ruidosa; o `ssthresh` não aparece no trace. | SS nos ~primeiros 0,3 s, depois CA |
 | 14 | Repetir 7–13 no seu trace | mesmo método | — |
+
+---
+
+# PARTE I — Prova recente **PR1** (fotos da prova corrigida)
+
+> **Fonte:** duas fotos de uma P1 **corrigida à mão** (questões 1 a 8). Não há data nem gabarito oficial, mas as **marcas de correção e as notas** nas margens ajudam a **inferir o gabarito do professor**. Onde a resposta vem de uma inferência (e não de uma marca explícita) está sinalizado com ⚠️.
+> **Formato:** estilo **múltipla escolha e V/F**, com **uma questão de gráfico** (cwnd). É um estilo mais **objetivo e atual** que as provas de 2013–2015: cobre **os mesmos conceitos**, mas em afirmações para julgar.
+> **Notas lidas na prova:** Q1 = 1,6 · Q4 = 1 · Q5 = 0,5 · Q6 = 1 · Q7 = 1 · Q8 = 1,5.
+
+### Q1. Característica pertence ao protocolo **0 (TCP)** ou **1 (UDP)**? (2 pontos; 10 itens)
+**O que testa:** a lista de diferenças TCP × UDP (slides A2 s.15–16; A4 s.5, s.12–13; A5 s.3).
+**Raciocínio:** pergunte-se, para cada item, "isso exige conexão/estado/garantia (TCP) ou é mínimo/sem garantia (UDP)?".
+
+| # | Característica | Resposta | Por quê |
+|---|---|---|---|
+| 1 | Estabelece conexão formal de **três vias** antes de transferir dados | **0 (TCP)** | SYN, SYN+ACK, ACK |
+| 2 | **Não** estabelece conexão; envia datagramas direto ao destino **sem aviso prévio** | **1 (UDP)** | sem handshake |
+| 3 | Usa **números de sequência e ACKs** para garantir entrega **ordenada e confiável** | **0 (TCP)** | transferência confiável |
+| 4 | Modelo **best‑effort**, sem garantia de entrega ou ordem | **1 (UDP)** | só detecta erro (checksum) |
+| 5 | Implementa **nativamente** controle de **fluxo e de congestionamento** | **0 (TCP)** | `rwnd` e `cwnd` |
+| 6 | **Deixa a cargo da aplicação** qualquer controle de confiabilidade ou de fluxo | **1 (UDP)** | a aplicação implementa (ex.: DNS reenvia) |
+| 7 | Trata os dados como **fluxo contínuo de bytes (stream)**, abstraindo as fronteiras das mensagens | **0 (TCP)** | não preserva fronteiras (A3 s.50) |
+| 8 | **Preserva as fronteiras das mensagens**: cada pacote da aplicação é um datagrama distinto e completo | **1 (UDP)** | cada `sendto` = 1 datagrama |
+| 9 | Essencial para aplicações que exigem **alta integridade** (e‑mail SMTP, HTTP/S, FTP) | **0 (TCP)** | não toleram perda |
+| 10 | Preferido para aplicações **sensíveis ao tempo e à latência** (DNS, streaming, jogos) | **1 (UDP)** | sem handshake/retransmissão |
+
+**Padrão:** os itens vêm em **pares** (um TCP, um UDP sobre o mesmo aspecto): handshake, confiabilidade, controle de fluxo/congestionamento, stream × datagrama, integridade × latência.
+**Erros comuns:** achar que "DNS" é TCP (é UDP/53 na maioria das consultas); confundir "stream de bytes" (TCP) com "fronteiras preservadas" (UDP).
+**Estude:** Transporte_do_Zero §1–3, §7; Temas T4, T19, **T22**.
+
+### Q2. Escolha entre TCP e UDP em protocolos **P2P** (V/F — 1 ponto)
+| # | Afirmação (resumo) | Gabarito | Justificativa |
+|---|---|---|---|
+| 1 | Em compartilhamento de arquivos (BitTorrent) o **TCP** é geralmente ideal para transferir blocos: confiável e ordenado, sem a aplicação implementar retransmissão | **V** | integridade dos arquivos; o BitTorrent usa TCP entre pares (A3 s.37) |
+| 2 | Em P2P de **tempo real** (voz/videoconferência), o **UDP** é preferível: baixa latência (sem handshake/retransmissões) vale mais que 100% de entrega | **V** | pacote atrasado perde a utilidade |
+| 3 | Desvantagem do TCP em P2P: **overhead** de conexão e controles de congestionamento podem adicionar latência e tornar a **travessia de NATs** mais complexa | **V** | A3 s.8 (desafio P2P: NAT/firewalls para conexões diretas) |
+| 4 | Principal vantagem do UDP em P2P é seu **controle de fluxo integrado**, que impede que um par rápido sobrecarregue um lento | **F** | o **UDP não tem controle de fluxo** nem de congestionamento (quem tem é o TCP) |
+**Estude:** Resumo §3.3; Temas T4, **T23**.
+
+### Q3. Qual a principal função da **porta** em uma comunicação TCP/IP? (1 ponto)
+**Resposta:** **identificar o processo (aplicação/socket) de destino dentro do host.** O IP leva o pacote ao **host**; a porta (16 bits) diz **a qual processo** entregar. É a base da **multiplexação/demultiplexação**. A resposta do aluno ("identificar qual aplicação será utilizada na conexão recebida") foi aceita com nota máxima.
+**Para valer mais:** cite também que o **identificador completo é (IP : porta)**, as faixas (bem conhecidas 0–1023, registradas, efêmeras) e exemplos (HTTP 80, DNS 53).
+**Estude:** Transporte_do_Zero §2; Temas T1, **T24**.
+
+### Q4. **Multithreading** em servidores concorrentes (V/F — 1 ponto; nota 1)
+| # | Afirmação | Gabarito | Justificativa |
+|---|---|---|---|
+| 1 | Servidor TCP: uma thread principal espera conexões em `accept()` e, a cada conexão aceita, cria **uma thread de trabalho dedicada** àquele cliente | **V** | modelo clássico; cada `accept()` devolve um socket de conexão |
+| 2 | Servidor UDP: sem conexão persistente, o benefício do multithreading é o **processamento paralelo de datagramas** (threads retiram pedidos de uma fila e respondem) | **V** | um só socket UDP; as threads dividem o trabalho |
+| 3 | O principal motivo de usar threads no servidor TCP é **garantir que os pacotes cheguem em ordem** (cada thread gerencia seu próprio nº de sequência) | **F** | ordem é garantida **pelo TCP no kernel**, não pelas threads |
+| 4 | Múltiplas threads (TCP ou UDP) mantêm o servidor **responsivo** mesmo que um cliente exija operação demorada ou tenha conexão lenta | **V** | um cliente lento não bloqueia os demais |
+**Estude:** Resumo §3.4; Transporte_do_Zero §2.5; Temas T5, **T25**.
+
+### Q5. **Controle de congestionamento** do TCP (V/F — 1 ponto; nota **0,5** = 2 de 4 corretos)
+| # | Afirmação | Gabarito | Justificativa |
+|---|---|---|---|
+| 1 | Objetivo: evitar sobrecarga dos roteadores/rede, ajustando a taxa com base no **feedback implícito** (perda) | **V** | IP não avisa; TCP infere pela perda |
+| 2 | **Slow start**: `cwnd` cresce **exponencialmente** (dobra a cada RTT) para sondar a capacidade | **V** | +1 MSS por ACK |
+| 3 | Em **timeout**, o TCP vê **congestionamento severo**: `cwnd = 1` segmento e **reduz o `ssthresh` pela metade** | **V** ⚠️ | ver nota abaixo |
+| 4 | A `cwnd` é **sempre limitada pela `rwnd`**, garantindo que o controle de congestionamento nunca envie mais que o buffer do receptor | **F** ⚠️ | `cwnd` e `rwnd` são **independentes**; o que vale é `min(cwnd, rwnd)` |
+⚠️ **Como inferi:** o aluno marcou **V, V, F, V** e a nota foi **0,5** (2 acertos em 4). Como os itens 1 e 2 são verdadeiros, os erros foram os itens **3** (marcado F, mas a chave é **V**) e **4** (marcado V, mas a chave é **F**).
+**Sobre o item 3 e a pegadinha da P13:** aqui "reduzindo o limiar pela metade" é aceito como **verdadeiro** (`ssthresh = cwnd/2`, ou seja, **metade da `cwnd` no momento da perda**). Já a P13 Q8e dizia *"o threshold é ajustado para a metade do **seu valor anterior**"* (metade do `ssthresh` antigo) → **falso**. **A diferença está na palavra:** *metade do cwnd* (certo) × *metade do ssthresh anterior* (errado). Leia a frase com cuidado.
+**Sobre o item 4:** a `cwnd` **não** é limitada pela `rwnd`; a **janela efetiva** é o **mínimo** dos dois. Por exemplo, com `cwnd = 50` e `rwnd = 10`, o remetente envia 10; com `cwnd = 5` e `rwnd = 50`, envia 5.
+**Estude:** Transporte_do_Zero §9.2; Temas T14, T20, **T29**.
+
+### Q6. **Controle de fluxo** (V/F — 1 ponto; nota 1: V, V, F, V)
+| # | Afirmação | Gabarito | Justificativa |
+|---|---|---|---|
+| 1 | Objetivo: impedir que o transmissor envie mais rápido do que o receptor consegue processar, evitando **overflow do buffer de recepção** | **V** | definição |
+| 2 | É implementado pelo **receptor**, que informa o espaço de buffer disponível no campo **Janela de Recepção (`rwnd`)** do cabeçalho TCP | **V** | `rwnd = RcvBuffer − dados no buffer` |
+| 3 | Para se adaptar à rede (perda e latência), o controle de fluxo usa o **Slow Start** para aumentar a taxa | **F** | **slow start é do controle de congestionamento** (`cwnd`), não do fluxo |
+| 4 | Se o receptor anuncia **`rwnd = 0`**, o transmissor deve **parar completamente** o envio de novos dados até a janela ser reaberta | **V** | o remetente para; só manda **sondas de 1 byte** para saber quando reabre |
+**Nota sobre o item 4:** o professor aceitou **V**. A nuance (que não torna o item falso): ele para os **dados novos**, mas continua enviando **sondas de 1 byte** para receber um `rwnd` atualizado e não travar.
+**Estude:** Transporte_do_Zero §9.1; Temas T13, T20.
+
+### Q7. Servidor A transfere arquivo grande para B; **rwnd = 32** segmentos e **cwnd = 22** segmentos. Quantos segmentos A pode enviar e o que está limitando? (1 ponto)
+**Raciocínio:** janela efetiva = **`min(cwnd, rwnd)`** = min(22, 32) = **22**. Quem limita é a **menor**: a `cwnd`. O **objetivo da `cwnd`** é **evitar o congestionamento da rede** (o da `rwnd` seria proteger o buffer do receptor).
+**Resposta correta: (b)** *"22 segmentos. O objetivo principal da cwnd (fator limitante) é evitar o congestionamento da rede."*
+Descarte: (a) e (c) dizem 32 (usam o maior valor); (d) acerta 22 mas atribui à `cwnd` o objetivo do `rwnd` (esgotamento do buffer).
+**Truque:** número = o menor dos dois; objetivo = o da variável que for menor.
+**Estude:** Transporte_do_Zero §9.2.10; Temas **T29**.
+
+### Q8. **Gráfico da `cwnd`** (TCP Reno), rodadas 0 a 26 (2 pontos; nota 1,5)
+**Como ler o gráfico (valores aproximados):**
+| Rodadas | O que acontece | `cwnd` |
+|---|---|---|
+| 1 a 6 | subida **exponencial** (1, 2, 4, 8, 16, 32) | **Slow Start**; ao chegar em 32 (= `ssthresh` inicial) muda de fase |
+| 6 a 16 | subida **linear** (+1 por rodada) | **Congestion Avoidance**, até ≈ **42** |
+| **16** | **queda para ≈ 24** (aprox. metade) e **continua subindo linearmente** | **evento de perda** |
+| 17 a 22 | subida linear a partir de ≈ 24 | Congestion Avoidance, até ≈ 29 |
+| **22 → 23** | **queda para 1** | **evento de perda (timeout)** |
+| 23 a 26 | 1, 2, 4, 8 (**exponencial**) | Slow Start de novo |
+
+**8.1 Períodos** (o aluno acertou):
+- **a) Slow Start:** rodadas **1 a 6** e **23 a 26**.
+- **b) Congestion Avoidance:** rodadas **6 a 16** e **17 a 22**.
+
+**8.2 (a) Mecanismo de detecção de perda na 16ª rodada → TRÊS ACKs DUPLICADOS** (o aluno errou: disse Timeout).
+*Explicação a partir do gráfico:* após a perda, a `cwnd` cai **só até cerca de metade** (de ≈ 42 para ≈ 24) e **continua crescendo linearmente** — comportamento do **fast recovery do Reno** (volta a Congestion Avoidance). **Se fosse timeout**, a `cwnd` cairia a **1 MSS** e a conexão voltaria ao **Slow Start** (crescimento exponencial a partir de 1). Isso é exatamente o que se vê na **22ª rodada** (cai a 1; depois 1, 2, 4, 8), a qual **sim** foi timeout. A queda "grande" que o aluno viu confundiu **tamanho da queda** com **timeout**: o timeout é o que **zera** a janela, não o que a reduz "bastante".
+*(Nota: o valor ≈ 24 = 21 + 3 corresponde à versão do livro, `cwnd = ssthresh + 3·MSS`; nos slides, `cwnd = ssthresh`.)*
+
+**8.2 (b) `ssthresh` para a 18ª rodada = 42/2 = 21.** Na perda por 3 dups, `ssthresh = cwnd/2`, com a `cwnd` no momento da perda (≈ 42). O valor continua **21 até a próxima perda** (rodada 22). (O aluno respondeu 21; a marca na prova indica que foi aceito.)
+
+**8.3 O `ssthresh` se altera até a 24ª rodada? Por quê?** (o aluno errou)
+**Sim, mas SÓ nos eventos de perda — não cresce em slow start nem em congestion avoidance.**
+- **Início:** `ssthresh` ≈ **32** (a mudança de slow start para CA ocorre quando a `cwnd` atinge 32).
+- **Rodada 16 (3 dups):** `ssthresh = 42/2 =` **21**.
+- **Rodada 22 (timeout):** `ssthresh = cwnd/2 = 29/2 ≈` **14–15**; `cwnd = 1`.
+- **Até a 24ª rodada** o valor é ≈ 14–15 (a `cwnd` está em slow start: 1, 2).
+O erro do aluno foi dizer que "em slow start o `ssthresh` duplica e em CA sobe de 1 em 1": **isso é a `cwnd`, não o `ssthresh`**. O `ssthresh` só é **recalculado na perda**.
+
+**8.4 Ao final da 26ª rodada chegam 3 ACKs duplicados. Novos `ssthresh` e `cwnd`?** (o aluno errou; a correção do professor está escrita na prova)
+`cwnd ≈ 8` no fim da rodada 26 → **`ssthresh = 8/2 = 4`** e **`cwnd = 4`** (correção na prova: *"8/2 = 4, cwnd e ssthresh = 4"*). O aluno havia **dobrado** em vez de dividir. Entra em **Congestion Avoidance** (linear: 4, 5, 6…).
+*(Pela versão do livro, `cwnd = ssthresh + 3 = 7`; o professor usou a dos slides: `cwnd = ssthresh`.)*
+
+**Método para qualquer gráfico de cwnd** (veja Transporte_do_Zero §9.2.16):
+1. Subida **exponencial** = slow start; **linear** = congestion avoidance.
+2. Queda a **1** = **timeout**; queda **à metade** sem voltar a 1 = **3 ACKs duplicados**.
+3. `ssthresh` = **metade da `cwnd` antes da queda**, e só muda nas quedas.
+4. Slow start termina quando `cwnd` atinge o `ssthresh`.
+
+---
+
+# PARTE J — Prova recente **PR2** (relato dos temas + respostas manuscritas)
+
+> **Fonte:** (i) lista dos temas cobrados numa prova recente (texto que você enviou) e (ii) uma folha **manuscrita** de outro aluno com as respostas das questões **5, 6 e 7** (`P1-redes.pdf`). Não temos os enunciados completos nem o gabarito oficial; as respostas abaixo foram **elaboradas por mim** a partir do que foi descrito e dos slides.
+> **Temas relatados:** (1) SPF, DKIM e DMARC; (2) piggybacking V/F; (3) DNS: funcionamento iterativo dos servidores raiz; (4) cliente‑servidor × P2P (15 000 "gigas" para 1000 clientes); (5) ACK a partir de seq e nº de bytes; (6) V/F clássicos.
+
+### J1. Associar **SPF, DKIM e DMARC** às suas explicações
+**Contexto (A3 s.17–18):** o SMTP original não verifica se quem envia está autorizado a falar em nome do domínio (**spoofing**). As defesas usam o **DNS** (registros **TXT**).
+| Mecanismo | O que é | Como funciona | O que protege |
+|---|---|---|---|
+| **SPF** (*Sender Policy Framework*) | **lista de IPs/servidores autorizados** a enviar e‑mail do domínio | registro TXT no DNS; o destino compara o **IP do remetente** com a lista | **origem** (evita spoofing direto) |
+| **DKIM** (*DomainKeys Identified Mail*) | **assinatura digital** do e‑mail | o remetente assina; o destino obtém a **chave pública no DNS** e valida | **integridade** (não foi alterado) e autenticidade do domínio |
+| **DMARC** (*Domain‑based Message Authentication, Reporting and Conformance*) | **política** do domínio sobre **o que fazer** se SPF/DKIM falharem | usa SPF + DKIM; instrui o destino: **none** (só observar), **quarantine** (reter), **reject** (bloquear) e pede relatórios | decide a **ação** |
+**Mnemônico:** **S**PF = "**S**ervidores autorizados" · **D**KIM = "**D**igital (assinatura)" · **D**MARC = "**D**ecisão (política)".
+**Estude:** Resumo §3.1; Gabarito Temas **T26**.
+
+### J2. **Piggybacking** — V/F (enunciados exatos desconhecidos; abaixo os itens típicos e as respostas)
+**Definição:** **piggybacking** ("pegar carona") é enviar o **ACK dentro de um segmento de dados** que já seria enviado no sentido contrário, em vez de gastar um segmento separado só para o ACK. Exemplo do slide (Telnet): o usuário digita `C` (A→B, `Seq=42, ACK=79`); o servidor devolve o eco e confirma no mesmo segmento (`Seq=79, ACK=43, dado='C'`).
+| Afirmação | Gabarito | Por quê |
+|---|---|---|
+| Piggybacking é enviar o ACK **junto com dados** do sentido contrário | **V** | definição |
+| Reduz o **número de segmentos** e o overhead | **V** | evita segmento vazio |
+| Em TCP o piggybacking é **obrigatório** (ACK só pode ir em segmento de dados) | **F** | sem dados, o TCP envia **segmento só de ACK** (P15 Q7a, P15b Q4a) |
+| Só é possível se o **receptor tiver dados** a enviar naquele momento | **V** (para haver carona) | senão, ACK puro |
+| O ACK "de carona" usa o **campo ACK** do cabeçalho com a flag **ACK = 1** | **V** | todo segmento TCP pode confirmar |
+| Existe no **UDP** | **F** | UDP não tem ACKs |
+| Para aumentar as chances de carona, o receptor pode **atrasar o ACK** (até 500 ms) | **V** | ACK atrasado (A5 s.20) |
+**Estude:** Transporte_do_Zero §7.3; Temas **T27**.
+
+### J3. **DNS: funcionamento iterativo dos servidores raiz**
+**Pergunta:** explicar o funcionamento iterativo nos servidores raiz (e por que).
+**Resposta completa:**
+- Os **servidores raiz têm a recursão desativada**. Quando o **DNS local** pergunta "qual o IP de `www.utfpr.edu.br`?", a raiz **não resolve**: responde com uma **referência** — os **NS (e os IPs) dos servidores do TLD `.br`**. O DNS local, então, **faz a próxima pergunta por conta própria** ao TLD, que devolve uma nova referência (os NS do **autoritativo** `utfpr.edu.br`), e o DNS local pergunta ao autoritativo, que dá o **IP final**. Em seguida o DNS local **responde ao host** e guarda tudo em **cache** (TTL).
+- **Por que iterativa na raiz:** a raiz recebe consultas do **mundo inteiro**; resolver tudo (recursão) **sobrecarregaria o topo** da árvore e facilitaria **DDoS**. Na iterativa **a raiz "apenas indica o caminho"** e **o DNS local faz o trabalho**.
+- **O cache protege ainda mais a raiz:** depois que o DNS local aprende o NS do `.br`, **nem consulta a raiz de novo** (TTL longo).
+- A raiz é formada por **13 identificadores lógicos (A–M)**, cada um uma rede **anycast** com mais de 1600 instâncias (resiliência).
+**A resposta manuscrita do aluno** ("Com a desativação das consultas recursivas no servidor raiz, o DNS local assume a carga de realizar as consultas iterativas. Para impedir o colapso, ele usa o cache DNS…") **está correta**; para nota máxima acrescente a referência ao TLD/autoritativo e o motivo (carga/DDoS).
+**Estude:** DNS_a_Fundo §3, §6–§8; Temas T8, **T31**.
+
+### J4. **Cliente‑servidor × P2P:** por que distribuir um arquivo enorme a 1000 clientes "colapsa" no C‑S e escala no P2P
+**Fórmulas (A3 s.32–35):** `F` = tamanho do arquivo; `N` = clientes; `u_s` = upload do servidor; `d_min` = download do pior cliente; `uᵢ` = upload de cada peer.
+```
+Cliente‑servidor:  D_cs  ≥ max{ N·F/u_s ,  F/d_min }
+P2P:               D_p2p ≥ max{ F/u_s ,  F/d_min ,  N·F/(u_s + Σuᵢ) }
+```
+**Por que colapsa no C‑S:** o servidor precisa enviar **N cópias inteiras** do arquivo pelo seu único link de upload → o tempo `N·F/u_s` **cresce linearmente com N** (e o servidor é gargalo e ponto único de falha).
+**Por que escala no P2P:** cada cliente que baixa **também envia** (`uᵢ`) aos outros; a cada novo peer, **cresce a demanda, mas também a oferta** (Σuᵢ aumenta com N). No 3º termo, o numerador e o denominador crescem juntos → o tempo **estabiliza** (limitado por `F/d_min`).
+
+**Com números** (parâmetros do slide: `u_s = 30 Mbps`, `d_min = 2 Mbps`, `uᵢ = 0,3 Mbps`; **a prova dá os seus próprios valores**):
+| Arquivo | Cliente‑servidor (N = 1000) | P2P (N = 1000) |
+|---|---|---|
+| **F = 15 Gbit** (slide) | `1000·15e9/30e6 = 500 000 s` ≈ **138,8 h** (≈ 6 dias) | `max{500 s; 7500 s; 1000·15e9/330e6 = 45 454 s}` ≈ **12,6 h** |
+| **F = 15 GB = 120 Gbit** | `1000·120e9/30e6 = 4 000 000 s` ≈ **1111 h** (≈ 46 dias) | `max{4000 s; 60 000 s; 363 636 s}` ≈ **101 h** (≈ 4 dias) |
+**Atenção às unidades:** **GB (bytes) × 8 = Gb (bits)**; Mbps = 10⁶ bits/s. Se o enunciado diz "15 000 gigas", verifique se é Gbit ou GB e converta; a **fórmula** é a mesma.
+**Resposta manuscrita do aluno** ("A arquitetura cliente‑servidor colapsaria … porque o tempo de entrega cresce linearmente com a demanda. Já na P2P, os clientes passam a atuar também como servidores, fazendo com que a capacidade total de distribuição cresça organicamente, tornando o desempenho escalável") **está correta**; para nota máxima, cite a **fórmula**/números e o termo `N·F/u_s`.
+**Estude:** Resumo §3.3; Temas **T30**.
+
+### J5. **ACK a partir de número de sequência e quantidade de dados**
+**Pergunta típica (a resposta manuscrita mostra o enunciado implícito):** *segmento de 500 bytes iniciando em 1000 → qual o ACK do servidor?*
+**Resposta:** os dados ocupam os bytes **1000 a 1499** (1000 + 500 − 1). O servidor responde **`ACK = 1500`**: o **próximo byte que espera receber** (ACK cumulativo = `Seq + nº de bytes`, se o segmento chegou em ordem).
+**Complementos que valem pontos:**
+- Se um segmento **anterior** faltasse (ex.: o de seq 500), o ACK continuaria **500** (duplicado): só confirma até onde há dados **contíguos**.
+- **Controle de fluxo:** se o servidor for lento, o `rwnd` (no cabeçalho dos ACKs) cai; com `rwnd = 0` o remetente **para** (sondas de 1 byte).
+**A resposta manuscrita** ("os dados ocuparão as posições até 1499, então o servidor responderá com um ACK 1500, indicando o próximo byte que espera receber. No caso do servidor ser muito lento, ele utilizará o mecanismo de Controle de Fluxo para informar ao cliente o espaço livre em seu buffer por meio da Janela de Recepção (rwnd) no cabeçalho TCP, forçando o emissor a cessar o envio caso o valor da rwnd seja zero") **está completa e correta**.
+**Estude:** Transporte_do_Zero §7.1–7.2; Resumo §8.1; Temas T11.
+
+### J6. V/F clássicos
+Os "V/F clássicos" desta prova seguem o **mesmo repertório** de P13 Q8, P15 Q7, P15b Q4, TT Q3 e PR1 Q2/Q4/Q5/Q6: (a) `rwnd` varia; (b) bytes não reconhecidos ≤ buffer; (c) ACK ≠ Seq + len do mesmo segmento; (d) slow start × `rwnd`; (e) `ssthresh = cwnd/2`; (f) piggybacking; (g) UDP sem fluxo/congestionamento. Veja a tabela de **T12** nos Temas.
 
 ---
 
