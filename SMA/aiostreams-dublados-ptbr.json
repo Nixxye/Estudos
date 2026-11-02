@@ -1,0 +1,50 @@
+{
+  "addonName": "Dublados PT-BR",
+  "addonDescription": "Somente filmes e séries dublados em português do Brasil",
+  "services": [
+    {
+      "id": "realdebrid",
+      "enabled": true,
+      "credentials": { "apiKey": "RPISYYCCRH337FAZGJBMLECCZIMXXF6LXMLP767PY2OXNG4PH4PA" }
+    }
+  ],
+  "presets": [
+    {
+      "type": "torrentio",
+      "instanceId": "brazuca1",
+      "enabled": true,
+      "options": {
+        "name": "Torrentio Brazuca",
+        "timeout": 15000,
+        "useMultipleInstances": false,
+        "url": "https://torrentio.strem.fun/providers=comando,bludv,micoleaodublado|language=portuguese|realdebrid=RPISYYCCRH337FAZGJBMLECCZIMXXF6LXMLP767PY2OXNG4PH4PA/manifest.json",
+        "resources": ["stream"]
+      }
+    },
+    {
+      "type": "brazuca-torrents",
+      "instanceId": "brazuca2",
+      "enabled": true,
+      "options": {
+        "name": "Brazuca Torrents",
+        "timeout": 15000,
+        "url": "https://94c8cb9f702d-brazuca-torrents.baby-beamup.club/realdebrid=RPISYYCCRH337FAZGJBMLECCZIMXXF6LXMLP767PY2OXNG4PH4PA/manifest.json",
+        "resources": ["stream"]
+      }
+    }
+  ],
+  "requiredLanguages": ["Portuguese (Brazil)", "Portuguese"],
+  "preferredLanguages": ["Portuguese (Brazil)", "Portuguese"],
+  "requiredKeywords": ["dublado", "dual", "nacional", "pt-br", "ptbr"],
+  "preferredResolutions": ["1080p", "2160p"],
+  "excludeUncached": false,
+  "excludeCached": false,
+  "sortCriteria": {
+    "global": [
+      { "key": "language", "direction": "desc" },
+      { "key": "resolution", "direction": "desc" },
+      { "key": "size", "direction": "desc" }
+    ]
+  },
+  "formatter": { "id": "gdrive" }
+}

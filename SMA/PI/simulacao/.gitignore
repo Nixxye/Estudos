@@ -1,0 +1,21 @@
+build_vhdl/
+__pycache__/
+*.pyc
+baseline/data/*.npz
+# Vivado / xsim (arquivos gerados e grandes)
+vivado/runs/*/*.dcp
+vivado/runs/*/*.sdf
+vivado/runs/*/aes_timesim.v
+vivado/sim*/xsim.dir/
+vivado/sim*/*.pb
+vivado/sim*/*.log
+vivado/sim*/*.wdb
+vivado/sim*/saif/
+vivado/sim*/states_timing.txt
+vivado/clockInfo.txt
+vivado/dfx_runtime.txt
+vivado/retry_open_fs.log
+vivado/*.log
+vivado/overnight/logs_*/
+vivado/overnight/pts_*.hex
+vivado/overnight/nohup.out

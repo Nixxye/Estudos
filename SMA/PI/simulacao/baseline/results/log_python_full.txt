@@ -1,0 +1,12 @@
+[  25.7s] E1 base sigma=10.0: SR=[0.0, 0.0, 0.0, 0.0, 0.0, 0.85, 1.0, 1.0] TTD90=3200
+[  52.3s] E2 sigma=0.0: TTD90=800
+[  65.5s] E2 sigma=5.0: TTD90=1600
+[  78.5s] E2 sigma=10.0: TTD90=3200
+[  91.4s] E2 sigma=20.0: TTD90=None
+[ 103.7s] E3 modelo errado (HW em vez de HD): TTD90=None
+[ 113.3s] E4 carga inicial (K0): TTD90=6400
+[ 126.0s] E5 8 bits: TTD90=3200
+[ 138.4s] E5 4 bits: TTD90=3200
+[ 151.2s] E5 2 bits: TTD90=6400
+[ 151.2s] E6 TVLA max|t|=92.7 (limite 4,5)
+[ 152.1s] concluído

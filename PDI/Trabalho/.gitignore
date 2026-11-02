@@ -1,0 +1,12 @@
+# Datasets (zips e pastas extraidas)
+Datasets/
+
+# Ambiente virtual, cache de treino/modelo e logs
+.venv/
+cache/
+cache_train.log
+results/
+
+# Python
+__pycache__/
+*.pyc
