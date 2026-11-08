@@ -2,7 +2,7 @@
 
 > **Versão completa e explicada do zero (para quem está vendo a matéria pela primeira vez):** [Tutorial_Controle_P2_Completo.md](Tutorial_Controle_P2_Completo.md). Este arquivo é o resumo em receitas.
 
-Cobre o `Relatório 04` (PD, PI, PID com Ziegler-Nichols) e os exemplos dos slides das Aulas 10 a 14. Teoria em [Resumo_Controle_P2.md](Resumo_Controle_P2.md). Resolvidos: [Gabarito_Relatorio04.md](Gabarito_Relatorio04.md) e [Exercicios_dos_Slides_P2.md](Exercicios_dos_Slides_P2.md). A P1 é a base: [Tutorial_Controle_P1.md](../P1/Tutorial_Controle_P1.md).
+Cobre o `Relatório 04` (PD, PI, PID com Ziegler-Nichols) e os exemplos dos slides das Aulas 10, 12, 13, 14 e 15. Teoria em [Resumo_Controle_P2.md](Resumo_Controle_P2.md). Resolvidos: [Gabarito_Relatorio04.md](Gabarito_Relatorio04.md) e [Exercicios_dos_Slides_P2.md](Exercicios_dos_Slides_P2.md). A P1 é a base: [Tutorial_Controle_P1.md](../P1/Tutorial_Controle_P1.md).
 
 ## Índice
 
@@ -10,15 +10,14 @@ Cobre o `Relatório 04` (PD, PI, PID com Ziegler-Nichols) e os exemplos dos slid
 1. [Receita A: traduzir especificações em polos dominantes](#a)
 2. [Receita B: projetar um PD](#b)
 3. [Receita C: projetar um PI](#c)
-4. [Receita D: PID por Ziegler-Nichols de malha fechada 🧩](#d)
+4. [Receita D: PID por Ziegler-Nichols (ganho limite e curva de reação)](#d)
 5. [Receita E: ajuste fino (como o professor faz)](#e)
 6. [Receita F: compensadores LAG e LEAD](#f)
 7. [Receita G: polos dominantes e resíduos](#g)
-8. [Receita H: diagrama de Bode](#h)
-9. [Receita I: efeito dos controladores (perguntas teóricas)](#i)
-10. [Conferência no MATLAB (no formato do professor)](#j)
-11. [Erros que mais custam pontos](#k)
-12. [Checklist final](#chk)
+8. [Receita I: efeito dos controladores (perguntas teóricas)](#i)
+9. [Conferência no MATLAB (no formato do professor)](#j)
+10. [Erros que mais custam pontos](#k)
+11. [Checklist final](#chk)
 
 <a id="s0"></a>
 ## 0. Qual receita usar?
@@ -27,11 +26,10 @@ Cobre o `Relatório 04` (PD, PI, PID com Ziegler-Nichols) e os exemplos dos slid
 |---|---|
 | "Projete um controlador **PD** para Mp ≤ ..% e ts ≤ .. s" | A + B (+ E) |
 | "Projete um controlador **PI** para Mp ≤ ..%, erro zero, ts ≤ .. s" | A + C (+ E) |
-| "Projete um **PID** pelo método **Ziegler-Nichols**" | D (+ E) |
+| "Projete um **PID** pelo método **Ziegler-Nichols** (malha fechada ou curva de reação)" | D (+ E) |
 | "Faça o **ajuste fino**" / "para obter overshoot menor que.." | E |
 | "Projete um compensador por **avanço/atraso de fase**" | F |
 | "Faça o **mapa de polos e zeros** e a **resposta ao degrau**" / "polo dominante" | G |
-| "Trace o **diagrama de Bode**" | H |
 | "Qual o efeito de aumentar Kp/Ki/Kd?" / "quando usar PI, PD..?" | I |
 
 <a id="a"></a>
@@ -96,7 +94,7 @@ Dados: planta `G(s)`, especificações. (Aula 14, p.2.)
 
 **Passo 1.** Polos dominantes `s₀` (receita A).
 
-**Passo 2: P basta?** Se **só P** não pode dar polos complexos (planta de 1ª ordem) ou se o enunciado exige **erro zero** ao degrau, vá para PI. (Planta tipo 0 com P: erro `1/(1 + Kp·G(0))` ≠ 0.)
+**Passo 2: P basta?** Faça o mesmo teste da fase do PD (some os ângulos dos polos de `G` até `s₀`; Aula 14: `−69,8° ≠ −180°`, faltam 110,2°). Se **só P** não pode dar polos complexos (planta de 1ª ordem) ou se o enunciado exige **erro zero** ao degrau, vá para PI. (Planta tipo 0 com P: erro `1/(1 + Kp·G(0))` ≠ 0.)
 
 **Passo 3: zero.** O PI tem um **polo na origem**: some também o ângulo desse polo (`∠s₀`, que vale `180° − tan⁻¹(ωd/σ)`).
 
@@ -115,19 +113,30 @@ Dados: planta `G(s)`, especificações. (Aula 14, p.2.)
 **Atalho útil 🧩 (cancelamento):** se a planta é `K/(s + a)`, escolher `z = a` **cancela** o polo da planta e dá `C·G = K·Kp/s`: malha fechada de **1ª ordem** `T = KKp/(s + KKp)`, **sem overshoot**, com `ts = 4/(K·Kp)`. Mas a malha só fica assim se o modelo da planta for exato (cancelamentos são frágeis).
 
 <a id="d"></a>
-## 4. Receita D: PID por Ziegler-Nichols de malha fechada 🧩
+## 4. Receita D: PID por Ziegler-Nichols (Aula 15)
 
-(Pedido na Q3 do Relatório 04. O método **não está** nos slides da pasta; confira com o caderno.)
+(Pedido na Q3 do Relatório 04. As tabelas estão na **Aula 15** dos slides. Os slides chamam `Ku`/`Pu` de `Kcr`/`Tcr`.)
 
-**Passos:**
+### D1: Ganho limite (malha fechada): quando você tem `G(s)`
 
 1. **Fixe `Ki = Kd = 0`** (só P, com ganho `K`). Escreva o **polinômio característico** de malha fechada: `1 + K·G(s) = 0` → `A(s) + K·B(s) = 0`.
-2. **Routh com K literal.** O **ganho crítico `Ku`** é o K que **zera a linha s¹** (oscilação sustentada).
-3. **Equação auxiliar** (linha s²) com `K = Ku`: dá `s = ±jωu`. Período crítico **`Pu = 2π/ωu`**.
-   - Isso é o mesmo cruzamento com jω do lugar das raízes: confira com `rlocus` e `[K,polos] = rlocfind(G)`.
-4. **Tabela ZN (PID):** `Kp = 0,6·Ku`, `Ti = Pu/2`, `Td = Pu/8`.
+2. **Routh com K literal.** O **ganho crítico `Kcr`** é o K que **zera a linha s¹** (oscilação sustentada).
+3. **Equação auxiliar** (linha s², a de cima da linha zerada) com `K = Kcr`: dá `s = ±jωcr`. Período crítico **`Tcr = 2π/ωcr`**.
+   - É o mesmo cruzamento com jω do lugar das raízes: confira com `rlocus`.
+4. **Tabela ZN (PID):** `Kp = 0,6·Kcr`, `Ti = 0,5·Tcr`, `Td = Tcr/8`. (PI: `0,45·Kcr`, `Tcr/1,2`; P: `0,5·Kcr`.)
 5. **Converta para a forma dos slides:** `Ki = Kp/Ti` e `Kd = Kp·Td`, com `C(s) = Kp + Ki/s + Kd·s`.
-6. **Simule.** ZN costuma dar overshoot de 40 a 60 %: faça o **ajuste fino** (receita E) até atender Mp e ts.
+6. **Simule.** ZN costuma dar overshoot de 40 a 60 % (os slides dizem ζ ≈ 0,21, Mp ≈ 50,9 %): faça o **ajuste fino** (receita E) até atender Mp e ts.
+
+**Mais estável:** Tyreus-Luyben (PID): `Kp = Kcr/2,2`, `Ti = 2,2·Tcr`, `Td = Tcr/6,3`.
+
+### D2: Curva de reação (malha aberta): quando você tem a **resposta ao degrau**
+
+1. Na curva em **S**, trace a **tangente no ponto de maior derivada**. Leia **`K`** (valor final), **`L`** (onde a tangente cruza o eixo do tempo) e **`T`** (do cruzamento até a tangente atingir `K`).
+2. **ZN, PID:** `Kp = 1,2·T/(K·L)`, `Ti = 2L`, `Td = 0,5L`. (PI: `0,9·T/(K·L)`, `Ti = L/0,3`; P: `T/(K·L)`.) Adequado para `0,1 ≤ L/T ≤ 0,3`.
+3. `Ki = Kp/Ti` e `Kd = Kp·Td`.
+4. **Outras tabelas** da Aula 15: **Cohen-Coon** (para `L/T` alto), **CHR** (Mp 0 % ou 20 %). Estão no [Resumo, seção 9](Resumo_Controle_P2.md#s10).
+
+**Exemplo do slide** (`2/(s²+3s+2)`, `K = 1`, `L = 0,2`, `T = 2`): `Kp = 12`, `Ti = 0,4`, `Ki = 30`, `Td = 0,1`, `Kd = 1,2`.
 
 <a id="e"></a>
 ## 5. Receita E: ajuste fino (como o professor faz)
@@ -190,25 +199,8 @@ Para "faça o mapa de polos e zeros e a resposta ao degrau" de `T₁`, `T₂`, `
 5. **Resposta ao degrau:** `step(T)`. Use a forma `y(t) = Σ rᵢ/pᵢ (1 − e^(pᵢ t))` para o cálculo analítico (exemplo da p.6).
 6. **Cancelamento:** par polo-zero muito próximos se anulam.
 
-<a id="h"></a>
-## 8. Receita H: diagrama de Bode (Aula 11)
-
-1. **Coloque `G(s)` na forma de Bode:** fatore cada termo como `(1 + jω/z)` e `(1 + jω/p)` (cada um vale 1 em ω → 0), separe os fatores em `jω` (origem), e junte as constantes.
-   - `Kb = K · Π zᵢ / Π pq`.
-2. **Liste os componentes e as frequências de corte** (ω = |z|, |p|, e ωn dos pares complexos).
-3. **Magnitude (dB), reta por reta:**
-   - Constante: `20·log|Kb|`.
-   - Origem: **inclinação** `−20R` (polos) ou `+20T` (zeros) dB/década, passando por `20·log|Kb|` em ω = 1 (para a assíntota inicial).
-   - Cada polo real: **−20 dB/déc** a partir de ω = p. Cada zero real: **+20 dB/déc** a partir de ω = z. Par complexo: **−40 dB/déc** a partir de ωn.
-4. **Monte a magnitude** somando as inclinações **a cada corte** (a inclinação inicial é `20·(T − R)` dB/déc).
-5. **Fase:** constante (0° ou −180°) + origem (−90R, +90T) + cada polo real (0° até 0,2p, −45° em p, −90° depois de 5p) + zeros reais (sinais opostos) + par complexo (0° → −90° em ωn → −180°). **Zero no semiplano direito:** mesma magnitude, **fase oposta**.
-6. **Soma dos gráficos** = Bode final.
-7. **Confira** no MATLAB: `[num,den] = zp2tf(zeros', polos', ganho); G = tf(num,den); bode(G); grid`.
-
-Exemplo do slide resolvido em [Exercicios_dos_Slides_P2.md](Exercicios_dos_Slides_P2.md#bode).
-
 <a id="i"></a>
-## 9. Receita I: efeito dos controladores (perguntas teóricas)
+## 8. Receita I: efeito dos controladores (perguntas teóricas)
 
 Responda sempre com **efeito no sistema + efeito na resposta**:
 
@@ -225,7 +217,7 @@ Responda sempre com **efeito no sistema + efeito na resposta**:
 Frase para a prova: "**PI e PID são os mais usados na indústria**" (slide Aula 12).
 
 <a id="j"></a>
-## 10. Conferência no MATLAB (no formato do professor)
+## 9. Conferência no MATLAB (no formato do professor)
 
 ```matlab
 % PD (exemplo da Aula 13)
@@ -255,7 +247,7 @@ rlocus(G); [K,polos]=rlocfind(G)    % clique no cruzamento com jw: K = Ku
 `stepinfo(U)` devolve **Overshoot**, **SettlingTime** (2 %) e **RiseTime**: é como se confere a especificação.
 
 <a id="k"></a>
-## 11. Erros que mais custam pontos
+## 10. Erros que mais custam pontos
 
 1. **Esquecer que o PI tem um polo na origem** (e que ele entra na soma dos ângulos).
 2. **Ângulos com o sinal errado:** zeros +, polos −; sempre anti-horário a partir do eixo real positivo.
@@ -267,7 +259,7 @@ rlocus(G); [K,polos]=rlocfind(G)    % clique no cruzamento com jw: K = Ku
 8. **Misturar critérios:** ts de 2 % usa 4/σ; de 5 %, 3/σ; de 1 %, 4,6/σ.
 
 <a id="chk"></a>
-## 12. Checklist final
+## 11. Checklist final
 
 - [ ] Polos dominantes `s₀ = −σ ± jωd` calculados e **marcados**?
 - [ ] Verifiquei se só P resolve (o ponto está no lugar?).

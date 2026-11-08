@@ -51,4 +51,4 @@
 | erro zero e boa resposta transitória | **PID** |
 | planta de 1ª ordem e polos desejados complexos | **PI ou PID** (P não chega ao alvo, o lugar fica no eixo real) |
 
-> Tudo aqui vem do que foi aplicado nas questões e nos slides das Aulas 10 a 14. A classificação de avanço e atraso usa a convenção padrão (confira com o α dos seus slides da Aula 10). Ziegler-Nichols não está nos slides (🧩).
+> Tudo aqui vem do que foi aplicado nas questões e nos slides das Aulas 10, 12, 13, 14 e 15. A classificação de avanço e atraso usa a convenção padrão (confira com o α dos seus slides da Aula 10). O Ziegler-Nichols está na Aula 15.

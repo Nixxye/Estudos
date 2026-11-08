@@ -1,6 +1,6 @@
 # Resumo P2: Sistemas de Controle A (ELN77A)
 
-Prof. Ronaldo Guisso (UTFPR). Cobre `Slides/` da P2: **Aulas 10 a 14** e o `Relatório 04`. Os exercícios e exemplos dos slides estão resolvidos em [Exercicios_dos_Slides_P2.md](Exercicios_dos_Slides_P2.md); o passo a passo para resolver questões está em [Tutorial_Controle_P2.md](Tutorial_Controle_P2.md); o gabarito do Relatório 04 está em [Gabarito_Relatorio04.md](Gabarito_Relatorio04.md).
+Prof. Ronaldo Guisso (UTFPR). Cobre `Slides/` da P2: **Aulas 10, 12, 13, 14 e 15** (a Aula 11, Diagrama de Bode, não cai na prova) e o `Relatório 04`. Os exercícios e exemplos dos slides estão resolvidos em [Exercicios_dos_Slides_P2.md](Exercicios_dos_Slides_P2.md); o passo a passo para resolver questões está em [Tutorial_Controle_P2.md](Tutorial_Controle_P2.md); o gabarito do Relatório 04 está em [Gabarito_Relatorio04.md](Gabarito_Relatorio04.md).
 
 > Marcas: **(Aula N, p.X)** = slide da Aula N, página X do PDF. **🧩** = conteúdo que a prova provavelmente cobra mas **não está** nos slides da pasta (conferir com o caderno).
 > Limitação: li o texto dos slides e conferi algumas páginas em imagem. Os gráficos dos slides (respostas ao degrau, root locus) eu **recalculei** e conferi os números com os dos slides.
@@ -14,12 +14,11 @@ A P1 (função de transferência, 1ª e 2ª ordem, erro, Routh, lugar das raíze
 3. [Compensação: série e por realimentação, diretrizes (Aula 10)](#s3)
 4. [Compensador por atraso de fase, LAG (Aula 10)](#s4)
 5. [Compensador por avanço de fase, LEAD (Aula 10)](#s5)
-6. [Diagrama de Bode (Aula 11)](#s6)
-7. [Controladores P, PI, PD, PID: efeitos (Aula 12)](#s7)
-8. [Projeto do controlador PD (Aula 13)](#s8)
-9. [Projeto do controlador PI (Aula 14)](#s9)
-10. [PID e Ziegler-Nichols 🧩 (Relatório 04)](#s10)
-11. [Fórmulas para a prova](#s11)
+6. [Controladores P, PI, PD, PID: efeitos (Aula 12)](#s7)
+7. [Projeto do controlador PD (Aula 13)](#s8)
+8. [Projeto do controlador PI (Aula 14)](#s9)
+9. [PID e métodos de sintonia: Ziegler-Nichols, Cohen-Coon, CHR, Tyreus-Luyben (Aula 15)](#s10)
+10. [Fórmulas para a prova](#s11)
 
 ---
 
@@ -140,45 +139,8 @@ Gc(s) = Kc · (s + 1/T) / (s + 1/(αT)),    0 < α < 1
 4. **Ganho (condição de módulo):** `Kc·K = |s₀+2|·|s₀+3|·|s₀+9,63| / |s₀+5| = 30,9`. Haverá polo em `−4 ± j4` quando `KcK = 30,9`.
 5. Função de malha aberta: `Gc·G = Kc·K (s+5)/((s+9,63)(s+3)(s+2))`.
 
-<a id="s6"></a>
-## 6. Diagrama de Bode (Aula 11)
-
-**O que é:** dois gráficos da resposta em frequência `G(jω)`: **ganho (magnitude, em dB)** e **fase (graus)**, ambos em função de ω (escala logarítmica). Vem da transformada de Fourier (`s = jω`): a de Laplace é para `s = σ + jω`, e a de Fourier só olha o eixo imaginário.
-
-**Forma de Bode** (cada fator escrito para ser 1 em ω → 0):
-
-```
-G(jω) = Kb · Π(1 + jω/zᵢ) / [ (jω)^R · Π(1 + jω/pq) ]      (zᵢ, pq ≠ 0)
-Kb = K · Π zᵢ / Π pq            (ganho de Bode)
-```
-Se não há polos nem zeros na origem, `Kb = G(0)` (ganho estático, ou ganho DC). **O Bode é a soma dos gráficos de cada fator.**
-
-**Componentes (Aula 11):**
-
-| Fator | Magnitude (dB) | Inclinação | Fase |
-|---|---|---|---|
-| **Constante** `Kb` | `20·log|Kb|` (reta) | 0 | 0° se `Kb > 0`; −180° se `Kb < 0` |
-| **Polo na origem** `1/(jω)^R` | `−20R·log ω` | **−20R dB/década** | **−90R°** |
-| **Zero na origem** `(jω)^T` | `+20T·log ω` | **+20T dB/década** | **+90T°** |
-| **Polo real** em `−p`: `1/(1 + jω/p)` | assíntotas: 0 dB para ω ≪ p; `−20·log(ω/p)` para ω ≫ p | **−20 dB/déc** a partir de ω = p (frequência de corte) | 0° até 0,2p; **−45° em p**; −90° a partir de 5p (erro máx. 11,3°) |
-| **Zero real** em `−z`: `1 + jω/z` | 0 dB e depois `+20·log(ω/z)` | **+20 dB/déc** a partir de ω = z | 0° → **+45° em z** → +90° |
-| **Zero no semiplano direito** (+z) | **mesma magnitude** do zero em −z | +20 dB/déc | **0° → −45° → −90°** (fase oposta) |
-| **Polos complexos** `1/(s²/ωn² + 2ζs/ωn + 1)` | `−10·log[(1 − ω²/ωn²)² + 4ζ²ω²/ωn²]`; pico na **frequência de ressonância** | **−40 dB/déc** depois de ωn | `−tan⁻¹[ (2ζ·ω/ωn) / (1 − ω²/ωn²) ]` (0° → −90° em ωn → −180°) |
-
-Se há **N polos (ou zeros) múltiplos**, multiplique o módulo (em dB) e a inclinação por N.
-
-**Exemplo do slide, resolvido em [Exercicios_dos_Slides_P2.md](Exercicios_dos_Slides_P2.md):** `G = 40 s²(s+10)/(s³(s+20)(s²+2s+2))`, com `Kb = 40·10/(20·2) = 10 → 20 dB`, 3 polos e 2 zeros na origem, zero em −10, polo em −20 e um par complexo com `ωn = √2` e `ζ = 1/√2`.
-
-**No MATLAB (slides):**
-```matlab
-[num,den] = zp2tf([0 0 -10]', [0 0 0 -20 -1-1i -1+1i], 40);   % zeros, polos, ganho (colunas)
-G = tf(num,den);
-bode(G); grid;
-```
-(O apóstrofo `'` transpõe o vetor.)
-
 <a id="s7"></a>
-## 7. Controladores P, PI, PD, PID: efeitos (Aula 12)
+## 6. Controladores P, PI, PD, PID: efeitos (Aula 12)
 
 Estrutura: `X → (−) → E → C(s) → M → G(s) → Y`. O controlador `C(s)` age sobre o erro `E = X − Y`.
 
@@ -223,7 +185,7 @@ Estrutura: `X → (−) → E → C(s) → M → G(s) → Y`. O controlador `C(s
 **PI e PID são os mais usados na indústria.**
 
 <a id="s8"></a>
-## 8. Projeto do controlador PD (Aula 13)
+## 7. Projeto do controlador PD (Aula 13)
 
 **Especificações (p.2):** usa-se o **modelo de 2ª ordem** como referência. A **região desejável** para os polos de malha fechada é a interseção de: (a) `ζ ≥ ζmin` (cone: reta a `cos⁻¹(ζmin)` do eixo real negativo) e (b) `ζωn ≥ (ζωn)min` (à esquerda de uma reta vertical).
 
@@ -258,7 +220,7 @@ Estrutura: `X → (−) → E → C(s) → M → G(s) → Y`. O controlador `C(s
 - **Somador/subtrator** com resistores iguais: `Vo = Vin1 − Vin2` (comparador do laço).
 
 <a id="s9"></a>
-## 9. Projeto do controlador PI (Aula 14)
+## 8. Projeto do controlador PI (Aula 14)
 
 **Uso:** **zerar o erro estacionário**, mas **piora o transiente**. `C(s) = Kp + Ki/s = Kp (s + z)/s`, com `z = Ki/Kp` real.
 
@@ -281,27 +243,51 @@ Estrutura: `X → (−) → E → C(s) → M → G(s) → Y`. O controlador `C(s
 **Truque do ajuste fino (dos dois exemplos):** mantém `z` e **reescala o ganho** (`Kd` sobe no PD, `Kp` desce no PI), porque o zero do controlador **aumenta o overshoot** em relação ao 2º grau puro previsto. (Não é universal: na Q2 do Relatório 04 o que resolve é aproximar o zero da origem; veja [Gabarito_Relatorio04.md](Gabarito_Relatorio04.md).)
 
 <a id="s10"></a>
-## 10. PID e Ziegler-Nichols 🧩 (Relatório 04, Q3)
+## 9. PID e métodos de sintonia (Aula 15, e Relatório 04, Q3)
 
-Os slides da pasta **não trazem o método Ziegler-Nichols**; a Q3 do Relatório 04 o pede. Resumo do método de **malha fechada** (oscilação sustentada):
+Nas Aulas 13 e 14 o controlador saía de **polos desejados** (fase e módulo). Aqui ele sai de **tabelas**, a partir de números medidos da planta. Os slides dizem que os métodos de **Ziegler-Nichols (ZN)** servem para P, PI e PID, **não servem para todos os casos**, e geralmente dão uma resposta equivalente a um 2º grau com **ζ = 0,21 (Mp = 50,9 %)**: overshoot grande, então **ajuste fino** depois.
 
-1. Com `Ki = Kd = 0` (só P), **aumente Kp** até a saída **oscilar de forma sustentada** (polos em ±jω). Esse ganho é o **ganho crítico `Ku`**, e o período da oscilação é **`Pu = 2π/ωu`**.
-2. **Analiticamente:** o `Ku` é o ganho que zera a linha s¹ do **Routh** do polinômio característico, e `ωu` vem da **equação auxiliar** (linha s²). É igual ao **cruzamento com jω do lugar das raízes** (passo 6 da P1).
-3. Tabela de sintonia ZN (malha fechada):
+**Forma do controlador:** `C(s) = Kp + Ki/s + Kd·s = Kp(1 + 1/(Ti·s) + Td·s)`, com **`Ki = Kp/Ti`** e **`Kd = Kp·Td`**.
+
+### 9.1 Ganho limite (ZN malha fechada, Aula 15, slides 18 a 24)
+
+1. Anule `Ki` e `Kd`; aumente `Kp` até a saída **oscilar sem decaimento**. Esse ganho é **`Kcr`** e o período é **`Tcr = 2π/ωcr`**.
+2. **Analiticamente (sem MATLAB):** polinômio característico `A(s) + Kp·B(s) = 0`; **Routh com `Kp` literal**. `Kcr` zera a linha **s¹**; `ωcr` sai da **equação auxiliar** (linha s², a de cima). É o cruzamento com jω do lugar das raízes.
 
 | Controlador | Kp | Ti | Td |
 |---|---|---|---|
-| P | 0,5·Ku | – | – |
-| PI | 0,45·Ku | Pu/1,2 | – |
-| **PID** | **0,6·Ku** | **Pu/2** | **Pu/8** |
+| P | 0,5·Kcr | ∞ | 0 |
+| PI | 0,45·Kcr | Tcr/1,2 | 0 |
+| **PID** | **0,6·Kcr** | **0,5·Tcr** | **Tcr/8** |
 
-4. Ganhos da forma dos slides `C(s) = Kp + Ki/s + Kd·s`: **`Ki = Kp/Ti`** e **`Kd = Kp·Td`**.
-5. ZN dá uma resposta **agressiva** (overshoot grande, típico 40 a 60 %). Faça **ajuste fino** com a tabela de efeitos da [seção 7](#s7): reduzir Kp, aumentar Kd, reduzir Ki.
+**Tyreus-Luyben** (mais estável): PI: `Kp = Kcr/3,2`, `Ti = 2,2·Tcr`; **PID: `Kp = Kcr/2,2`, `Ti = 2,2·Tcr`, `Td = Tcr/6,3`**.
 
-Resolvido em [Gabarito_Relatorio04.md](Gabarito_Relatorio04.md).
+**Exemplo do slide** (`G = 1/(s(s+1)(s+5))`): Routh dá `Kcr = 30`; auxiliar `6s² + 30 = 0` → `ωcr = 2,24` → `Tcr = 2,8 s`. ZN PID: `Kp = 18`, `Ki = 12,8`, `Kd = 6,3`. Tyreus-Luyben PID: `Kp = 13,6`, `Ki = 2,2`, `Kd = 6`.
+
+### 9.2 Curva de reação (malha aberta, Aula 15, slides 3 a 17)
+
+Aplica-se um degrau na entrada da planta (malha aberta) e lê-se, na curva em **S**, a tangente no ponto de maior derivada: **`K`** (valor final), **`L`** (tempo morto) e **`T`** (constante de tempo). Fator de incontrolabilidade: `L/T`.
+
+| Controlador | Kp | Ti | Td |
+|---|---|---|---|
+| P | T/(K·L) | ∞ | 0 |
+| PI | 0,9·T/(K·L) | L/0,3 | 0 |
+| **PID (ZN)** | **1,2·T/(K·L)** | **2L** | **0,5L** |
+
+O PID do ZN tem **polo na origem e zeros duplos em `−1/L`**. ZN adequado para `0,1 ≤ L/T ≤ 0,3` (instável para `L/T > 0,4`).
+
+**Cohen-Coon** (para `L/T` alto; `τ = L/(L+T)`), PID: `Kp = 1,35(T/(KL))(1 + 0,18τ/(1−τ))`, `Ti = L(2,5 − 2τ)/(1 − 0,39τ)`, `Td = 0,37L(1−τ)/(1 − 0,81τ)`.
+
+**CHR (PID):** Mp = 0 %: `Kp = 0,6T/(KL)`, `Ti = T`, `Td = 0,5L`. Mp = 20 %: `Kp = 0,95T/(KL)`, `Ti = 1,4T`, `Td = 0,47L`.
+
+**Exemplo do slide** (`G = 2/(s²+3s+2)`, `K = 1`, `L = 0,2`, `T = 2`): ZN PID `12; 30; 1,2` (Mp ≈ 43 %); ZN PI `9; 13,5` (Mp ≈ 58 %); ZN P `10`; CHR 20 % PID `9,5; 3,4; 0,89` (Mp ≈ 12 %).
+
+### 9.3 Ajuste fino
+
+Depois do ZN, use a tabela de efeitos da [seção 6](#s7): reduzir Kp, aumentar Kd, reduzir Ki. Tudo resolvido em [Gabarito_Relatorio04.md](Gabarito_Relatorio04.md) (Q3) e [Resolucao_Exercicios/11_Aula15_Sintonia_PID.md](Resolucao_Exercicios/11_Aula15_Sintonia_PID.md).
 
 <a id="s11"></a>
-## 11. Fórmulas para a prova
+## 10. Fórmulas para a prova
 
 ```
 Especificações (2ª ordem):  ζmin = -ln(Mp)/sqrt(π² + ln²(Mp))      (Mp em fração; ex.: 15% → 0,517)
@@ -313,9 +299,9 @@ PD:  C = Kd(s+z)           θz = (soma dos ângulos dos polos de G) - 180°
                            z = σ + ωd/tan(θz)      Kd = ∏|s0-pk| / (K_G·|s0+z|)      Kp = z·Kd
 PI:  C = Kp(s+z)/s         mesma conta com o polo extra em 0 (some o ângulo do polo na origem)
                            Kp = ∏|s0-pk| / (K_G·|s0+z|)      Ki = z·Kp
-PID: C = Kp + Ki/s + Kd·s  ZN: Kp=0,6Ku  Ti=Pu/2  Td=Pu/8   Ki=Kp/Ti   Kd=Kp·Td    Pu = 2π/ωu
+PID: C = Kp + Ki/s + Kd·s  ZN ganho limite: Kp=0,6Kcr  Ti=0,5Tcr  Td=Tcr/8   Ki=Kp/Ti   Kd=Kp·Td   Tcr = 2π/ωcr
+                           ZN curva de reação: Kp=1,2T/(KL)  Ti=2L  Td=0,5L     (P: T/(KL); PI: 0,9T/(KL), Ti=L/0,3)
+                           Tyreus-Luyben: Kp=Kcr/2,2  Ti=2,2Tcr  Td=Tcr/6,3     CHR 20%: Kp=0,95T/(KL), Ti=1,4T, Td=0,47L
 LAG: Gc=Kc(s+1/T)/(s+1/(αT)), α>1     e(∞) = 1/(1 + Kc·α·G(0))
 LEAD: mesma forma, 0<α<1             z = 1/T, p = 1/(αT); fase pelo ponto s0; Kc·K pelo módulo
-Bode: |G|dB = 20log|Kb| ± 20R·log ω ± ...; polo real: -20 dB/déc em ω=p; zero real: +20 dB/déc em ω=z
-      fase: ±45° em p/z, ±90° a partir de 5p/5z; polos complexos: -40 dB/déc depois de ωn
 ```

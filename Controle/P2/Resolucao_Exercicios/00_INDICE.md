@@ -15,21 +15,22 @@ Todos os números foram conferidos com Python (numpy/scipy). **O MATLAB não foi
 | 7 e 8 | Aula 10, slides 6 e 7 | Resposta ao degrau de 40/((s+20)(s+2)(s+1)) | [05_Aula10_Resposta_ao_degrau_G40.md](05_Aula10_Resposta_ao_degrau_G40.md) |
 | 9 a 12 | Aula 10, slides 19 a 22 | Compensador LAG | [06_Aula10_Compensador_LAG.md](06_Aula10_Compensador_LAG.md) |
 | 13 a 16 | Aula 10, slides 24 a 27 | Compensador LEAD | [07_Aula10_Compensador_LEAD.md](07_Aula10_Compensador_LEAD.md) |
-| 17 a 30 | Aula 11, slides 7 a 20 | Bode (dois exemplos + elementos) | [08_Aula11_Bode.md](08_Aula11_Bode.md) |
-| 31 a 35 | Aula 12, slides 3 a 11 | Efeito de P, PI e PD | [09_Aula12_Efeito_de_P_PI_PD.md](09_Aula12_Efeito_de_P_PI_PD.md) |
-| 36 a 49 | Aula 13, slides 6 a 19 | Projeto de PD (G = 2/s²) + AmpOps | [10_Aula13_Projeto_PD_e_AmpOps.md](10_Aula13_Projeto_PD_e_AmpOps.md) |
-| 50 a 57 | Aula 14, slides 3 a 10 | Projeto de PI (G = 1/(s+12)) | [11_Aula14_Projeto_PI.md](11_Aula14_Projeto_PI.md) |
+| 17 a 21 | Aula 12, slides 3 a 11 | Efeito de P, PI e PD | [08_Aula12_Efeito_de_P_PI_PD.md](08_Aula12_Efeito_de_P_PI_PD.md) |
+| 22 a 35 | Aula 13, slides 6 a 19 | Projeto de PD (G = 2/s²) + AmpOps | [09_Aula13_Projeto_PD_e_AmpOps.md](09_Aula13_Projeto_PD_e_AmpOps.md) |
+| 36 a 43 | Aula 14, slides 3 a 10 | Projeto de PI (G = 1/(s+12)) | [10_Aula14_Projeto_PI.md](10_Aula14_Projeto_PI.md) |
+| 44 a 59 | Aula 15, slides 7 a 12, 16 e 17, 19 a 26 | Sintonia de PID: ZN (curva de reação e ganho limite), CHR, Tyreus-Luyben | [11_Aula15_Sintonia_PID.md](11_Aula15_Sintonia_PID.md) |
 
 ## Arquivos extras (copiados da pasta P2)
 
 | Arquivo | O que é |
 |---|---|
-| [12_Bode_Passo_a_Passo.md](12_Bode_Passo_a_Passo.md) | Receita em 8 passos para qualquer Bode, com o exemplo `4/(s(s+1)(s+2)(s+3))` resolvido e a figura |
 | [Rel04_Resumo_das_3_questoes_com_MATLAB.md](Rel04_Resumo_das_3_questoes_com_MATLAB.md) | As três questões do Relatório 04 em formato compacto, com o código MATLAB de cada uma |
 | [Slides_Consolidado_todos_os_exercicios.md](Slides_Consolidado_todos_os_exercicios.md) | Versão antiga: todos os exercícios dos slides num só arquivo (inclui Aula 10, slides 13 e 14, que não estão no PDF) |
 | `img/` | Figuras usadas pelos arquivos |
 
 Material de apoio que ficou na pasta P2: [Resumo](../Resumo_Controle_P2.md), [Tutorial completo](../Tutorial_Controle_P2_Completo.md), [Formulário](../Formulario_P2.pdf) e [Tabela comparativa dos controladores](../Tabela_Comparativa_Controladores.md).
+
+> A Aula 11 (Diagrama de Bode) foi retirada: o professor avisou que não cai na prova.
 
 ## Receita comum dos projetos (Q1, Q2, Aula 13, Aula 14)
 

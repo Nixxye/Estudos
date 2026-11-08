@@ -2,7 +2,7 @@
 
 Mesmo formato dos gabaritos [Q1 (PD)](01_Rel04_Q1_PD.md) e [Q2 (PI)](02_Rel04_Q2_PI.md): em cada passo há o **Conceito** e **Na questão**. Não repito o que é da P1 (Routh, lugar das raízes, tipo e erro). Todos os números foram conferidos por simulação.
 
-> 🧩 O **método de Ziegler-Nichols não está nos slides da pasta**, mas a questão o pede. Usei a forma padrão (malha fechada, oscilação sustentada). Confira com o caderno.
+> O método de Ziegler-Nichols de **malha fechada (ganho limite)** está na **Aula 15** dos slides (slides 18 a 24). Lá o ganho crítico se chama `Kcr` e o período `Tcr`; aqui uso `Ku` e `Pu`, que são os mesmos números. O slide 2 avisa que o ZN geralmente dá uma resposta como a de um 2º grau com ζ = 0,21 (Mp ≈ 50,9 %), o que explica o overshoot grande antes do ajuste fino.
 
 ## Enunciado
 

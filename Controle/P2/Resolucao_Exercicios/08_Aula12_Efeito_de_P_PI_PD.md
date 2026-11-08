@@ -1,6 +1,6 @@
 # Aula 12: Exemplos de P, PI e PD (efeito no sistema)
 
-**Origem:** `Exercicios_P2.pdf` págs. 31 a 35 (Aula 12, slides 3, 5, 8, 9 e 11). Os slides só mostram **gráficos**; os números abaixo foram obtidos por simulação (scipy) para dar uma correção numérica.
+**Origem:** `Exercicios_P2.pdf` págs. 17 a 21 (Aula 12, slides 3, 5, 8, 9 e 11). Os slides só mostram **gráficos**; os números abaixo foram obtidos por simulação (scipy) para dar uma correção numérica.
 
 ![Exemplos da Aula 12](img/aula12_exemplos.png)
 

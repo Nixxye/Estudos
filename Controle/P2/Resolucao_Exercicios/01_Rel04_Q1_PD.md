@@ -228,7 +228,7 @@ Moral: o polo do filtro deve ficar **muito mais longe que o zero** (≥ 10×); q
 | Passo | Conceito | Onde |
 |---|---|---|
 | 0 | O que é e o que faz o PD | [Tutorial completo §3](../Tutorial_Controle_P2_Completo.md#s3) |
-| 1 | Especificação → polos dominantes | [Tutorial completo §1](../Tutorial_Controle_P2_Completo.md#s1), [Resumo §8](../Resumo_Controle_P2.md#s8) |
+| 1 | Especificação → polos dominantes | [Tutorial completo §1](../Tutorial_Controle_P2_Completo.md#s1), [Resumo §7](../Resumo_Controle_P2.md#s8) |
 | 2 | Teste de "só P resolve?" pela condição de fase | [Tutorial completo §5, passo 2](../Tutorial_Controle_P2_Completo.md#s5) |
 | 3 | Zero pela fase, ângulos | [Tutorial completo §4 e §5](../Tutorial_Controle_P2_Completo.md#s4) |
 | 4 | Ganho pelo módulo | [Tutorial completo §5, passo 4](../Tutorial_Controle_P2_Completo.md#s5) |

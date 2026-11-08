@@ -111,7 +111,7 @@ Um derivador puro amplifica ruído: na implementação, `C(s) = (Kp + Kd s)/(1 +
 
 ### Passo 2: só P resolve?
 
-Com P, a planta de **1ª ordem** tem **um único polo, real** (`s = −4 − 3Kp`), que **nunca** vai ao alvo complexo `−8 ± j10,9`. Dá para atender os números do enunciado só com P (`Kp = 4/3` põe o polo em −8: ts = 0,5 s, Mp = 0), **mas** o valor final seria `3Kp/(4 + 3Kp) = 0,5`, ou seja, **erro de 50 %** ao degrau. O **PI** é o que zera o erro, e é por isso que a questão pede um PI.
+Conferência pela fase: o polo em −4 até `s₀ = −8 + j10,915` dá `180° − 69,9° = 110,1°`; a fase de `K·G(s₀)` é `−110,1° ≠ −180°` (faltam 69,9°), então `s₀` **não pertence** ao lugar de `K·G`. Em outras palavras, com P, a planta de **1ª ordem** tem **um único polo, real** (`s = −4 − 3Kp`), que **nunca** vai ao alvo complexo `−8 ± j10,9`. Dá para atender os números do enunciado só com P (`Kp = 4/3` põe o polo em −8: ts = 0,5 s, Mp = 0), **mas** o valor final seria `3Kp/(4 + 3Kp) = 0,5`, ou seja, **erro de 50 %** ao degrau. O **PI** é o que zera o erro, e é por isso que a questão pede um PI.
 
 ### Passo 3: o zero do PI (condição de fase)
 
@@ -175,11 +175,11 @@ Tipo 1: erro ao degrau **zero** ✔ (para qualquer um dos projetos acima).
 
 ---
 
-## Q3: PID por Ziegler-Nichols de malha fechada, `G(s) = 10/(s(s+10)(s+6))`  🧩
+## Q3: PID por Ziegler-Nichols de malha fechada, `G(s) = 10/(s(s+10)(s+6))`
 
 > **Versão com o conteúdo explicado dentro da questão (conceito + aplicação em cada passo):** [Gabarito_Q3_PID_Explicado.md](Gabarito_Q3_PID_Explicado.md).
 
-(O método ZN **não está nos slides da pasta**; usei a forma padrão. Confira com o caderno.)
+(O método ZN de malha fechada está na **Aula 15** dos slides, slides 18 a 24; `Ku` e `Pu` aqui são o `Kcr` e o `Tcr` de lá.)
 
 ### Passo 1: só P, polinômio característico
 

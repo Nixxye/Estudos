@@ -1,6 +1,6 @@
 # Exercícios e exemplos dos slides da P2, resolvidos
 
-A última prova teve questões **iguais às da lista e dos slides**, então aqui estão **todos os exercícios e exemplos numéricos dos slides da P2** (Aulas 10 a 14), com enunciado, onde está, resolução e conferência. Os da lista (Relatório 04) estão em [Gabarito_Relatorio04.md](Gabarito_Relatorio04.md). Teoria: [Resumo_Controle_P2.md](Resumo_Controle_P2.md). Passos: [Tutorial_Controle_P2.md](Tutorial_Controle_P2.md).
+A última prova teve questões **iguais às da lista e dos slides**, então aqui estão **todos os exercícios e exemplos numéricos dos slides da P2** (Aulas 10, 12, 13, 14 e 15), com enunciado, onde está, resolução e conferência. Os da lista (Relatório 04) estão em [Gabarito_Relatorio04.md](Gabarito_Relatorio04.md). Teoria: [Resumo_Controle_P2.md](Resumo_Controle_P2.md). Passos: [Tutorial_Controle_P2.md](Tutorial_Controle_P2.md).
 
 ## Resultado da busca nos slides
 
@@ -11,12 +11,12 @@ A última prova teve questões **iguais às da lista e dos slides**, então aqui
 | Aula 10, p.13 e 14 | exemplo (motivação) | `G = K/((s+1)(s+2)(s+3))` com K = 18 | [§3](#e3) |
 | Aula 10, p.19 a 22 | exemplo resolvido | compensador **LAG** em `K(s+8)/((s+3)(s+2)(s+1))` | [§4](#e4) |
 | Aula 10, p.24 a 27 | exemplo resolvido | compensador **LEAD** em `K/((s+3)(s+2))` | [§5](#e5) |
-| Aula 11 | exemplos resolvidos | Bode de `40s²(s+10)/(s³(s+20)(s²+2s+2))` e de `4/(s(s+1)(s+2)(s+3))`, vários elementos | [§6](#bode) |
-| Aula 12, p.3 a 11 | exemplos (só gráficos) | efeito de P, PI, PD | [§7](#e7) |
-| **Aula 13** | exemplo resolvido completo | projeto de **PD** em `2/s²` | [§8](#e8) |
-| **Aula 14** | exemplo resolvido completo | projeto de **PI** em `1/(s+12)` | [§9](#e9) |
+| Aula 12, p.3 a 11 | exemplos (só gráficos) | efeito de P, PI, PD | [§6](#e7) |
+| **Aula 13** | exemplo resolvido completo | projeto de **PD** em `2/s²` | [§7](#e8) |
+| **Aula 14** | exemplo resolvido completo | projeto de **PI** em `1/(s+12)` | [§8](#e9) |
+| **Aula 15** | exemplos resolvidos | sintonia de **PID** por tabelas: ZN (curva de reação e ganho limite), CHR, Tyreus-Luyben | [§9](#e10) |
 
-Só um é chamado de "Exercício" no slide (Aula 10, p.3); os outros são "Exemplo", e é onde costuma estar o que cai na prova (principalmente os projetos PD e PI das Aulas 13 e 14, o LAG/LEAD da Aula 10 e o Bode da Aula 11).
+Só um é chamado de "Exercício" no slide (Aula 10, p.3); os outros são "Exemplo", e é onde costuma estar o que cai na prova (principalmente os projetos PD e PI das Aulas 13 e 14 e o LAG/LEAD da Aula 10).
 
 ---
 
@@ -155,77 +155,8 @@ Conferência: valor final `0,006 − 1,111 + 2,105 = 1,000` ✓ (= `G(0) = 40/40
 
 ---
 
-<a id="bode"></a>
-## 6. Aula 11: Bode (todos os exemplos dos slides)
-
-### 6.1 Exemplo principal: `G(s) = 40 s²(s+10) / (s³(s+20)(s+1+j)(s+1−j))`
-
-Note `(s+1+j)(s+1−j) = s² + 2s + 2`.
-
-**Passo 1: forma de Bode.**
-
-`G(jω) = 40·(jω)²·10·(jω/10 + 1) / [ (jω)³ · 20(jω/20 + 1) · 2((jω)²/2 + jω + 1) ]`
-
-`Kb = 40·10/(20·2) = 10`, e o par complexo tem `ωn = √2 = 1,414` e `ζ = 1/√2 = 0,707` (de `s²/ωn² + 2ζs/ωn + 1` com `ωn² = 2` e `2ζ/ωn = 1`).
-
-**Passo 2: componentes.**
-
-| Componente | Magnitude | Fase |
-|---|---|---|
-| Constante `Kb = 10` | `20·log 10 = 20 dB` | 0° |
-| `(jω)²/(jω)³ = 1/(jω)` (3 polos e 2 zeros na origem) | **−20 dB/déc** | **−90°** |
-| Zero em −10 | +20 dB/déc a partir de ω = 10 | 0° → +45° em 10 → +90° |
-| Polo em −20 | −20 dB/déc a partir de ω = 20 | 0° → −45° em 20 → −90° |
-| Par complexo (ωn = 1,414; ζ = 0,707) | −40 dB/déc a partir de 1,414 | 0° → −90° em ωn → −180° |
-
-**Passo 3: magnitude assintótica** (inclinação inicial `20·(2 − 3) = −20 dB/déc`, passando por `20 dB` em ω = 1):
-
-| Faixa | Inclinação | Valor no fim da faixa |
-|---|---|---|
-| ω < 1,414 | −20 dB/déc | `20 − 20·log 1,414 = 17,0 dB` |
-| 1,414 a 10 | −20 − 40 = **−60** | `17,0 − 60·log(10/1,414) = −34,0 dB` |
-| 10 a 20 | −60 + 20 = **−40** | `−34,0 − 40·log 2 = −46,0 dB` |
-| ω > 20 | −40 − 20 = **−60** | |
-
-**Passo 4: fase total:** começa em **−90°** (ω → 0) e termina em **−270°** (ω → ∞: 6 polos − 3 zeros = 3 → −270°).
-
-![Bode do exemplo](img/aula11_bode_exemplo.png)
-
-(A figura mostra o Bode exato em azul e a soma das assíntotas em vermelho tracejado. Como ζ = 0,707, **não há pico de ressonância**: o pico só aparece para ζ < 0,707.)
-
-**MATLAB (slide):**
-```matlab
-[num,den]=zp2tf([0 0 -10]',[0 0 0 -20 -1-1i -1+1i],40);
-G=tf(num,den);
-bode(G);
-grid;
-```
-
-### 6.2 Exemplo: `G(s) = 4/(s(s+1)(s+2)(s+3))`
-
-- `Kb = 4/(1·2·3) = 2/3` → **−3,5 dB**; 1 polo na origem; polos em 1, 2, 3.
-- Inclinações: −20 (até 1), −40 (1 a 2), −60 (2 a 3), −80 (acima de 3).
-- Valores assintóticos: ω = 1 → −3,5 dB; ω = 2 → −15,6 dB; ω = 3 → −26,1 dB.
-- Fase: de −90° até −360° (4 polos).
-- MATLAB: `[num,den]=zp2tf([],[0 -1 -2 -3],4); G=tf(num,den); bode(G); grid;`
-
-### 6.3 Elementos isolados (os exemplos numéricos dos slides)
-
-| Exemplo do slide | O que é | Resultado |
-|---|---|---|
-| `1/(1 + jω/20)` | polo real em −20 | corte em 20; −20 dB/déc depois; fase 0° até 4, **−45° em 20**, −90° a partir de 100 |
-| `1 + jω/10` | zero real em −10 | corte em 10; +20 dB/déc; fase 0° até 2, **+45° em 10**, +90° a partir de 50 |
-| `1 − jω/100` | zero no **semiplano direito** (+100) | **mesma magnitude** do zero em −100; fase **0°, −45° em 100, −90°** a partir de 500 |
-| `2/(s²+2s+2)` | polos complexos, ωn = √2, ζ = 1/√2 | `MAG = −10·log[(1 − ω²/2)² + ω²] = −10·log(1 + ω⁴/4)`; `φ = −tan⁻¹(2ω/(2 − ω²))` |
-| `(jω)^R` polos / zeros na origem | `G = 1/(jω)³` e `(jω)²` | `MAG = −60·log ω`, fase −270° (polos); `+40·log ω`, +180° (zeros) |
-| Constante | `Kb = 40·10/(20·2)` | **20 dB**, fase 0° |
-
-**Laplace → Fourier (slide p.2 a 5, só exemplo):** `H(s) = (10s²+28s+24)/(s²+4s+8) = 10 (s+1,4±j0,66)/(s+2±j2)`. Ganho em baixa frequência `H(0) = 24/8 = 3` (9,5 dB); em alta frequência `→ 10` (20 dB). A transformada de Fourier é a de Laplace calculada em `s = jω`.
-
----
-
 <a id="e7"></a>
-## 7. Aula 12 (p.3 a 11): efeito de P, PI, PD (exemplos dos slides, recalculados)
+## 6. Aula 12 (p.3 a 11): efeito de P, PI, PD (exemplos dos slides, recalculados)
 
 Os slides mostram só os **gráficos**; abaixo estão os números (conferidos por simulação) e os gráficos refeitos.
 
@@ -265,14 +196,14 @@ Os slides mostram só os **gráficos**; abaixo estão os números (conferidos po
 ---
 
 <a id="e8"></a>
-## 8. Aula 13: projeto do PD (exemplo completo)
+## 7. Aula 13: projeto do PD (exemplo completo)
 
 **Enunciado:** `G = 2/s²`, Mp máx. 20 %, ts (2 %) máx. 4 s, controlador PD.
 
 **Resolução (passos da Aula 13):**
 
 1. **Polos dominantes.** `ζmin`: `0,2 = e^(−πζ/√(1−ζ²))` → `ζmin = 0,46`. `ts = 4/(ζωn) = 4` → `(ζωn)min = 1` → `ωn = 1/0,46 = 2,174`; `ωd = 2,174·√(1 − 0,46²) = 1,93`. **Polos: −1 ± j1,93.**
-2. **P basta?** O lugar de `K·2/s²` é o eixo imaginário (polos em 0 duplo): não passa por −1 ± j1,93. **Não**: PD necessário.
+2. **P basta?** Fase em `s₀ = −1 + j1,93`: dois polos em 0 dão `2 × 117,4° = 234,8°`, então a fase de `K·G(s₀)` é `−234,8° ≠ −180°` (sobram 54,8°). `s₀` **não pertence** ao lugar de `K·2/s²` (o eixo imaginário). **Não**: PD necessário.
 3. **Condição de fase:** `C·G = 2Kd(s+z)/s²`. Ângulo de cada polo em 0 até `−1 + j1,93`: `180° − tan⁻¹(1,93/1) = 117,4°`. A soma é `2 × 117,4° = 234,8°`.
    `θz − 234,8° = −180°` → `θz = 54,8°`.
    `tan(54,8°) = 1,93/(z − 1) = 1,418` → `z − 1 = 1,36` → **`z = 2,36`**.
@@ -294,14 +225,14 @@ Os slides mostram só os **gráficos**; abaixo estão os números (conferidos po
 ---
 
 <a id="e9"></a>
-## 9. Aula 14: projeto do PI (exemplo completo)
+## 8. Aula 14: projeto do PI (exemplo completo)
 
 **Enunciado:** `G = 1/(s+12)`, Mp máx. 10 %, **erro zero** ao degrau, ts (2 %) máx. 0,5 s, controlador PI.
 
 **Resolução (passos da Aula 14):**
 
 1. **Polos dominantes.** `ζmin`: `0,1 = e^(−πζ/√(1−ζ²))` → `ζmin = 0,59`. `ts = 4/(ζωn) = 0,5` → `(ζωn)min = 8` → `ωn = 8/0,59 = 13,56`; `ωd = 13,56·√(1−0,59²) = 10,9`. **Polos: −8 ± j10,9.**
-2. **P basta?** Não: planta de 1ª ordem com P só tem polo real (nunca complexo), e com P o erro seria `1/(1 + Kp/12) ≠ 0`.
+2. **P basta?** Fase em `s₀ = −8 + j10,9`: o polo em −12 dá `tan⁻¹(10,9/4) = 69,8°`, então a fase de `K·G(s₀)` é `−69,8° ≠ −180°` (faltam 110,2°). `s₀` **não pertence** ao lugar (só o eixo real), e com P o erro seria `1/(1 + Kp/12) ≠ 0`. **Não**: PI necessário.
 3. **Condição de fase.** `C·G = Kp(s+z)/(s(s+12))`. Ângulos até `−8 + j10,9`:
    - polo em 0: `180° − tan⁻¹(10,9/8) = 126,3°`
    - polo em −12: `tan⁻¹(10,9/4) = 69,8°`
@@ -318,9 +249,25 @@ Os slides mostram só os **gráficos**; abaixo estão os números (conferidos po
 
 ---
 
+<a id="e10"></a>
+## 9. Aula 15: sintonia de PID (ZN, Cohen-Coon, CHR, Tyreus-Luyben)
+
+Resolução completa, com as tabelas, as contas e os gráficos, em [Resolucao_Exercicios/11_Aula15_Sintonia_PID.md](Resolucao_Exercicios/11_Aula15_Sintonia_PID.md). Resultados dos exemplos dos slides:
+
+| Exemplo | Planta | Controlador resultante | Simulação |
+|---|---|---|---|
+| ZN curva de reação, PID (slides 7 e 8) | `2/(s²+3s+2)`, `K = 1`, `L = 0,2`, `T = 2` | `Kp = 12`, `Ki = 30`, `Kd = 1,2` | Mp ≈ 43 % |
+| ZN curva de reação, PI (slides 9 e 10) | mesma | `Kp = 9`, `Ki = 13,5` | Mp ≈ 58 % |
+| ZN curva de reação, P (slides 11 e 12) | mesma | `Kp = 10` | Mp ≈ 35 %, erro 9 % |
+| CHR 20 %, PID (slides 16 e 17) | mesma | `Kp = 9,5`, `Ki = 3,4`, `Kd = 0,89` | Mp ≈ 12 % |
+| ZN ganho limite, PID (slides 19 a 24) | `1/(s(s+1)(s+5))` | `Kcr = 30`, `Tcr = 2,8 s`; `Kp = 18`, `Ki = 12,8`, `Kd = 6,3` | Mp ≈ 62 % |
+| Tyreus-Luyben, PID (slides 25 e 26) | mesma | `Kp = 13,6`, `Ki = 2,2`, `Kd = 6` | Mp ≈ 28 % |
+
+---
+
 ## Como estudar esta lista
 
 1. Refaça cada resolução **sem olhar**, usando os passos do [tutorial](Tutorial_Controle_P2.md).
 2. Confira os números principais: **z = 2,36; Kd = 1; Kd = 2,58 (PD)** e **z = 45,7; Kp = 4; Kp = 3,2; Ki = 146,2 (PI)**.
 3. No LAG, saiba calcular `e(∞)` pelos 4 casos; no LEAD, saiba **por que o zero em −5** e **p = 9,63, α = 0,52, Kc·K = 30,9**.
-4. No Bode, saiba montar a **tabela de inclinações** e a fase total do exemplo `40s²(s+10)/(...)`.
+4. Nos métodos de sintonia (Aula 15), saiba as tabelas do **ZN** (ganho limite e curva de reação) e fazer o **Routh para `Kcr` e `Tcr`** à mão.

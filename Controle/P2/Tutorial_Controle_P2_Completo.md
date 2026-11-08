@@ -1,4 +1,4 @@
-# Tutorial completo da P2: projeto de controladores e Bode (para quem está vendo pela primeira vez)
+# Tutorial completo da P2: projeto de controladores (para quem está vendo pela primeira vez)
 
 Este tutorial **explica a matéria nova da P2** do começo, com a intuição por trás de cada passo, e depois mostra como resolver os exercícios do jeito do professor Guisso. **Não repito o que foi coberto na P1** (função de transferência, 1ª e 2ª ordem, erro estacionário, Routh, lugar das raízes e suas condições de fase e de módulo). Quando precisar de algo da P1, eu só cito o nome e a fórmula.
 
@@ -17,11 +17,10 @@ Arquivos relacionados: [Resumo_Controle_P2.md](Resumo_Controle_P2.md) (resumo do
 5. [Projeto do PD, passo a passo (Aula 13)](#s5)
 6. [Projeto do PI, passo a passo (Aula 14)](#s6)
 7. [Ajuste fino: por que e como](#s7)
-8. [PID e o método de Ziegler-Nichols 🧩](#s8)
+8. [PID e os métodos de sintonia: Ziegler-Nichols e outros (Aula 15)](#s8)
 9. [Compensadores por atraso (LAG) e avanço (LEAD) de fase (Aula 10)](#s9)
-10. [Diagrama de Bode, do zero (Aula 11)](#s10)
-11. [Os exercícios do Relatório 04 em resumo](#s11)
-12. [Glossário, autoteste e checklist](#s12)
+10. [Os exercícios do Relatório 04 em resumo](#s11)
+11. [Glossário, autoteste e checklist](#s12)
 
 ---
 
@@ -54,7 +53,7 @@ O erro `E = X − Y` entra no controlador, e o controlador decide o sinal `M(s)`
 - Condição de **fase** `∠G·H = ±180°` e de **módulo** `|K·G·H| = 1` (Aula 7).
 - Tipo do sistema e erro (`Kp, Kv, Ka`); Routh para achar ganho crítico e frequência de cruzamento.
 
-**O que é novo na P2:** polos dominantes (Aula 10), compensadores LAG/LEAD (Aula 10), Bode (Aula 11), controladores P/PI/PD/PID (Aulas 12 a 14) e Ziegler-Nichols 🧩.
+**O que é novo na P2:** polos dominantes (Aula 10), compensadores LAG/LEAD (Aula 10), controladores P/PI/PD/PID (Aulas 12 a 14) e métodos de sintonia como o Ziegler-Nichols (Aula 15).
 
 ---
 
@@ -395,7 +394,7 @@ Blocos usados nos slides:
 
 **1. Polos desejados** `s₀ = −σ ± jωd` (P1).
 
-**2. Só P basta?** Se a planta é de **1ª ordem**, P só dá **um polo real** (nunca complexo): o alvo complexo não é alcançável. Mesmo que os números de Mp e ts sejam atendidos por um polo real (ex.: Q2 com `Kp = 4/3`), o erro ao degrau seria `1/(1 + Kp·G(0)) ≠ 0` (50 % na Q2). Então PI.
+**2. Só P basta?** Se a planta é de **1ª ordem**, P só dá **um polo real** (nunca complexo): o alvo complexo não é alcançável. Confira pela **fase**: some os ângulos dos polos de `G` até `s₀`. Na Aula 14 (`1/(s+12)`, `s₀ = −8 + j10,9`) o polo em −12 dá `69,8°`, a fase de `K·G(s₀)` é `−69,8°`, e o lugar exige `−180°`: faltam 110,2°, então `s₀` não pertence ao lugar. Mesmo que os números de Mp e ts sejam atendidos por um polo real (ex.: Q2 com `Kp = 4/3`), o erro ao degrau seria `1/(1 + Kp·G(0)) ≠ 0` (50 % na Q2). Então PI.
 
 **3. Zero (condição de fase)**: some os ângulos dos polos da planta **e do polo em 0**:
 
@@ -481,9 +480,9 @@ Nos dois exemplos acima manter o zero e mudar o ganho funcionou, mas no PI da Q2
 ---
 
 <a id="s8"></a>
-## 8. PID e o método de Ziegler-Nichols 🧩
+## 8. PID e os métodos de sintonia (Aula 15)
 
-(O Relatório 04, Q3, pede. **O método não está nos slides da pasta**; abaixo está a forma padrão.)
+(O Relatório 04, Q3, pede. As tabelas estão na **Aula 15** dos slides. Lá o ganho crítico se chama `Kcr` e o período, `Tcr`; aqui uso `Ku` e `Pu`, que são os mesmos números.)
 
 ### 8.1 A ideia
 
@@ -511,6 +510,8 @@ A oscilação sustentada corresponde a polos **em ±jω**: exatamente o cruzamen
 | PI | `0,45·Ku` | `Pu/1,2` | – |
 | **PID** | **`0,6·Ku`** | **`Pu/2`** | **`Pu/8`** |
 
+(Tabela do slide 18 da Aula 15, com `Kcr = Ku` e `Tcr = Pu`.)
+
 `Ti` e `Td` são tempos. Para a forma dos slides `C = Kp + Ki/s + Kd·s`:
 
 **`Ki = Kp/Ti`** e **`Kd = Kp·Td`**.
@@ -528,6 +529,23 @@ A oscilação sustentada corresponde a polos **em ±jω**: exatamente o cruzamen
 O resultado do ZN tem **overshoot de 59 %**. O método foi pensado para dar uma sintonia **inicial** agressiva; depois se **ajusta**. O enunciado já prevê: "faça um ajuste para obter overshoot menor que 10 % com ts < 2,5 s". Usando a tabela de efeitos: diminuir `Kp`, aumentar bastante `Kd`, diminuir `Ki`. Um conjunto que atende: **`Kp = 45`, `Ki = 60`, `Kd = 16`** (Mp 8,6 %, ts 2,15 s).
 
 ![PID da Q3](img/rel04_q3_pid.png)
+
+### 8.6 Os outros métodos da Aula 15
+
+**Ziegler-Nichols de curva de reação (malha aberta).** Em vez de levar o sistema à oscilação, **abre-se a malha**, aplica-se um degrau na planta e lê-se a curva em **S**: a tangente no ponto de maior derivada dá `K` (valor final), `L` (tempo morto) e `T` (constante de tempo).
+
+| Controlador | `Kp` | `Ti` | `Td` |
+|---|---|---|---|
+| P | `T/(K·L)` | – | – |
+| PI | `0,9·T/(K·L)` | `L/0,3` | – |
+| **PID** | **`1,2·T/(K·L)`** | **`2L`** | **`0,5L`** |
+
+Vale para `0,1 ≤ L/T ≤ 0,3`. O PID resultante tem **polo na origem e zeros duplos em `−1/L`**. Exemplo do slide: `2/(s²+3s+2)`, `K = 1`, `L = 0,2`, `T = 2` → `Kp = 12`, `Ki = 30`, `Kd = 1,2`.
+
+**Cohen-Coon** (para `L/T` mais alto) e **CHR** (resposta mais rápida com Mp = 0 % ou 20 %) usam a mesma curva de reação, com outras tabelas. **Tyreus-Luyben** usa `Ku` e `Pu` como o ZN de malha fechada, com ganhos menores (`Kp = Ku/2,2`, `Ti = 2,2·Pu`, `Td = Pu/6,3`) para **menos overshoot**. Todas as tabelas, com os exemplos do slide e as simulações, estão em [Resolucao_Exercicios/11_Aula15_Sintonia_PID.md](Resolucao_Exercicios/11_Aula15_Sintonia_PID.md) e no [Resumo, seção 9](Resumo_Controle_P2.md#s10).
+
+Os slides lembram: o ZN **não serve para todos os casos**, e a resposta típica equivale a um sistema de 2ª ordem com `ζ ≈ 0,21` (Mp ≈ 50,9 %). Por isso o ajuste fino é parte do método.
+
 
 ---
 
@@ -595,143 +613,8 @@ Então o lugar das raízes quase não muda. É isso que o LAG explora.
 
 ---
 
-<a id="s10"></a>
-## 10. Diagrama de Bode, do zero (Aula 11)
-
-### 10.1 O que é a resposta em frequência
-
-Se você aplica uma entrada **senoidal** `sen(ωt)` a um sistema estável, depois do transitório a saída também é uma senoide **de mesma frequência**, mas com **amplitude e fase diferentes**:
-
-`y(t) = |G(jω)|·sen(ωt + ∠G(jω))`
-
-- `|G(jω)|` é o **ganho** (quanto a amplitude é multiplicada).
-- `∠G(jω)` é a **fase** (quanto a senoide é atrasada ou adiantada).
-
-Ambos dependem de ω. A resposta em frequência é `G(s)` avaliada em **`s = jω`** (só o eixo imaginário do plano s). É a **transformada de Fourier**, o primo da de Laplace (que usa `s = σ + jω`).
-
-O **diagrama de Bode** desenha as duas funções de ω: um gráfico do **ganho em dB** e um da **fase em graus**, ambos com ω em **escala logarítmica**.
-
-### 10.2 Por que dB e escala logarítmica
-
-- **dB:** `MAG = 20·log₁₀|G(jω)|`. Multiplicar ganhos vira **somar dB**.
-- **Escala log em ω:** uma **década** é multiplicar ω por 10. Intervalos de frequência muito grandes cabem no mesmo gráfico.
-- **O truque do Bode:** `G(jω)` é um **produto** de fatores (cada polo e zero). O módulo de um produto é o produto dos módulos (em dB, **soma**), e a fase de um produto é a **soma das fases**. Então o Bode de `G` é **a soma dos Bode de cada fator**. Aprenda cada fator e some.
-
-![Os tijolos do Bode](img/bode_componentes.png)
-
-### 10.3 Colocar `G(s)` na forma de Bode
-
-Fatore cada termo de modo que **valha 1 quando ω → 0**:
-
-- zero em −z: `(s + z) = z·(1 + s/z)`
-- polo em −p: `(s + p) = p·(1 + s/p)`
-- as constantes saem para fora: `Kb = K·Πz/Πp`
-- polos/zeros na origem ficam como `(jω)^R` e `(jω)^T`.
-
-`G(jω) = Kb·Π(1 + jω/zᵢ) / [(jω)^R·Π(1 + jω/pq)]`
-
-**Exemplo (Aula 11, p.7):** `G(s) = 40 s²(s+10)/(s³(s+20)(s+1+j)(s+1−j))`, com `(s+1+j)(s+1−j) = s²+2s+2`.
-
-- Zero em −10: `(s + 10) = 10(1 + s/10)`.
-- Polo em −20: `(s + 20) = 20(1 + s/20)`.
-- `s²+2s+2 = 2(s²/2 + s + 1)`, par complexo com `ωn² = 2` e `2ζ/ωn = 1` (`ωn = √2 = 1,414`, `ζ = 0,707`).
-- `Kb = 40·10/(20·2) = 10`.
-- Origem: `s²/s³ = 1/s`: **um polo líquido na origem**.
-
-`G(jω) = 10·(jω/10 + 1) / [ (jω)·(jω/20 + 1)·((jω)²/2 + jω + 1) ]`
-
-### 10.4 O que cada "tijolo" faz (e por quê)
-
-**Constante `Kb`:** `20·log|Kb|` dB (uma reta horizontal). Fase 0° se `Kb > 0`, −180° se `Kb < 0`.
-
-**Polo na origem `1/(jω)`:** o ganho vale `1/ω`, em dB `−20·log ω`: uma **reta de inclinação −20 dB/década** que passa por **0 dB em ω = 1**. A fase é **−90°** constante. Com `R` polos: `−20R dB/déc` e `−90R°`.
-
-**Zero na origem `jω`:** o contrário: **+20 dB/déc**, passa por 0 dB em ω = 1, fase **+90°**.
-
-**Polo real em −p, `1/(1 + jω/p)`:**
-
-- Para `ω ≪ p`: o termo `jω/p` é pequeno: ganho ≈ 1 → **0 dB**.
-- Para `ω ≫ p`: o termo `1` é desprezível: ganho ≈ `p/ω` → `−20·log(ω/p)`: reta de **−20 dB/déc**.
-- As duas retas **se cruzam em ω = p** (a **frequência de corte**), onde o ganho exato é `1/√2` = **−3 dB**.
-- **Fase:** `−tan⁻¹(ω/p)`: 0° em baixas frequências, **−45° em ω = p**, −90° em altas frequências. O professor usa a aproximação por retas: 0° até `0,2p`, −45° em `p`, −90° a partir de `5p` (erro máximo 11,3°).
-
-**Zero real em −z, `1 + jω/z`:** o espelho: 0 dB até `z`, depois **+20 dB/déc**; fase **0° → +45° em z → +90°**.
-
-**Zero no semiplano direito (+z), `1 − jω/z`:** **a mesma magnitude** do zero em −z (só importa o módulo), mas a fase é **o oposto**: 0° → −45° → −90°.
-
-**Polos complexos `1/(s²/ωn² + 2ζ s/ωn + 1)`:**
-
-- Até `ωn`: ≈ 0 dB; depois de `ωn`: **−40 dB/déc** (são dois polos).
-- Perto de `ωn` há um **pico** (a **ressonância**) quando o amortecimento é pequeno (`ζ < 0,707`); quanto menor ζ, maior o pico. Para `ζ ≥ 0,707` não há pico.
-- **Fase:** 0° → **−90° em ωn** → −180°. A transição é mais **abrupta** quanto menor ζ.
-
-### 10.5 Procedimento para desenhar
-
-**Magnitude (assintótica, por retas):**
-
-1. **Inclinação inicial** (baixas frequências) = `20·(T − R)` dB/déc, onde `T` = zeros na origem e `R` = polos na origem.
-2. **Nível:** a reta inicial tem de passar por `20·log|Kb|` dB em ω = 1 (se `R` e `T` forem zero, é horizontal em `20·log|Kb|`).
-3. **A cada frequência de corte**, mude a inclinação: **polo real: −20**; **zero real: +20**; **par complexo: −40** (na frequência `ωn`).
-4. Percorra da esquerda para a direita, calculando o valor no fim de cada trecho: `valor_novo = valor_antigo + inclinação·log₁₀(ω_novo/ω_antigo)`.
-
-**Fase:**
-
-1. Some as fases constantes (constante: 0° ou −180°; origem: `−90R + 90T`).
-2. Some a transição de cada polo e zero (±90° distribuídos em torno do corte).
-3. **Pontos de controle:** ω → 0 (só origem e constante); ω → ∞ (cada polo −90°, cada zero +90°, cada par complexo −180°).
-
-### 10.6 O exemplo completo (Aula 11)
-
-**Magnitude assintótica de `G`:**
-
-| Faixa de ω | Inclinação | Como chega | Valor no fim |
-|---|---|---|---|
-| até 1,414 | `20·(0 − 1) = −20` | `20 dB` em ω = 1 | `20 − 20·log 1,414 = 17,0 dB` |
-| 1,414 a 10 | −20 − 40 (par complexo) = **−60** | | `17,0 − 60·log(10/1,414) = −34,0 dB` |
-| 10 a 20 | −60 + 20 (zero em 10) = **−40** | | `−34,0 − 40·log 2 = −46,0 dB` |
-| acima de 20 | −40 − 20 (polo em 20) = **−60** | | |
-
-**Fase:** começa em **−90°** (o polo na origem) e termina em **−270°** (6 polos − 3 zeros = 3 → `−90° × 3`).
-
-![Bode do exemplo](img/aula11_bode_exemplo.png)
-
-(Azul = Bode exato; vermelho tracejado = soma das assíntotas. Como `ζ = 0,707`, não há pico de ressonância.)
-
-**MATLAB (dos slides):**
-```matlab
-[num,den]=zp2tf([0 0 -10]',[0 0 0 -20 -1-1i -1+1i],40);   % zeros, polos e ganho
-G=tf(num,den);
-bode(G);
-grid;
-```
-(O apóstrofo `'` transpõe o vetor linha em coluna.)
-
-**Segundo exemplo (p.20):** `G = 4/(s(s+1)(s+2)(s+3))`. `Kb = 4/(1·2·3) = 2/3` (−3,5 dB). Inclinações: −20 (até 1), −40 (1 a 2), −60 (2 a 3), −80 (acima de 3). Fase de −90° a −360°.
-`[num,den]=zp2tf([],[0 -1 -2 -3],4); G=tf(num,den); bode(G); grid;`
-
-### 10.7 O que o Bode revela sobre o sistema
-
-| Característica do gráfico | O que significa |
-|---|---|
-| Inclinação em baixas frequências | número de integradores (tipo); `−20R dB/déc` ↔ tipo `R` |
-| Nível em baixas frequências | ganho DC (`Kb`) ou constante de erro |
-| Cada mudança de inclinação | um polo (−20) ou zero (+20) na frequência de corte |
-| Inclinação em altas frequências | `(zeros − polos) × 20 dB/déc`: o excesso de polos |
-| Fase em altas frequências | `−90° × (polos − zeros)` |
-| Pico de ressonância | par complexo pouco amortecido |
-
-### 10.8 Erros comuns no Bode
-
-1. Esquecer de normalizar (cada fator igual a 1 em ω → 0), errando `Kb`.
-2. Inclinação inicial errada (contar mal polos/zeros na origem).
-3. Somar em escala linear em vez de dB.
-4. Esquecer que o **zero no semiplano direito** tem a **fase oposta**.
-5. Trocar a frequência do par complexo (`ωn = √(termo constante)` da forma `s² + 2ζωn s + ωn²`).
-
----
-
 <a id="s11"></a>
-## 11. Os exercícios do Relatório 04 em resumo
+## 10. Os exercícios do Relatório 04 em resumo
 
 Resoluções completas, com contas e figuras, em [Gabarito_Relatorio04.md](Gabarito_Relatorio04.md).
 
@@ -744,9 +627,9 @@ Resoluções completas, com contas e figuras, em [Gabarito_Relatorio04.md](Gabar
 ---
 
 <a id="s12"></a>
-## 12. Glossário, autoteste e checklist
+## 11. Glossário, autoteste e checklist
 
-### 12.1 Glossário
+### 11.1 Glossário
 
 | Termo | Significado |
 |---|---|
@@ -759,11 +642,8 @@ Resoluções completas, com contas e figuras, em [Gabarito_Relatorio04.md](Gabar
 | **Ajuste fino** | pequena correção dos ganhos depois da simulação |
 | **LAG / LEAD** | compensador por atraso / avanço de fase (polo e zero) |
 | **`Ku`, `Pu`** | ganho crítico e período crítico (Ziegler-Nichols) |
-| **Frequência de corte** | ω em que as assíntotas de um polo/zero se cruzam |
-| **dB / década** | unidade de ganho / variação de ω por fator 10 |
-| **Ressonância** | pico de ganho de um par complexo pouco amortecido |
 
-### 12.2 Autoteste (responda sem olhar)
+### 11.2 Autoteste (responda sem olhar)
 
 1. Por que um polo em −20 pode ser ignorado perto de −1 ± j, mas um em −1,5 não?
 2. O que o zero de um PD faz com o lugar das raízes? Que sinal tem o ângulo dele na soma?
@@ -773,8 +653,6 @@ Resoluções completas, com contas e figuras, em [Gabarito_Relatorio04.md](Gabar
 6. Por que o projeto "exato" ainda precisa de ajuste fino?
 7. O que são `Ku` e `Pu`? Como se acham pelo Routh?
 8. Qual a diferença entre LAG e LEAD (α, posição do polo e do zero, e para que serve cada um)?
-9. Qual a inclinação inicial do Bode de `10(s+5)/(s²(s+1))`?
-10. O que acontece no Bode quando passamos de um polo real e de um zero real na frequência de corte?
 
 **Respostas curtas:**
 
@@ -786,10 +664,8 @@ Resoluções completas, com contas e figuras, em [Gabarito_Relatorio04.md](Gabar
 6. O zero do controlador (e polos extras) afeta o overshoot e não está nas fórmulas de 2ª ordem.
 7. Ganho P que leva à oscilação sustentada e seu período; `Ku` zera a linha s¹ e `ωu` vem da equação auxiliar (linha s²).
 8. LAG: `α > 1`, polo mais perto da origem, reduz o erro; LEAD: `α < 1`, zero mais perto da origem, move o lugar das raízes.
-9. `20·(T − R) = 20·(0 − 2) = −40 dB/déc`.
-10. Polo: inclinação cai 20 dB/déc (fase −45° no corte); zero: inclinação sobe 20 dB/déc (fase +45° no corte).
 
-### 12.3 Checklist de projeto
+### 11.3 Checklist de projeto
 
 - [ ] Calculei `ζmin`, `σ = 4/ts`, `ωn`, `ωd` e o alvo `s₀ = −σ ± jωd`.
 - [ ] Verifiquei se só P resolve (soma dos ângulos dos polos ≠ 180°).

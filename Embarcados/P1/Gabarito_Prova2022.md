@@ -4,7 +4,7 @@ Arquivo original: `Prova Antiga/Prova2022.md`. Na época era **sem consulta**; h
 
 ## Antes de usar este gabarito
 
-> **A Questão 1 (ThreadX/RTOS, 4 pts) está FORA do escopo da sua P1** e pode ser ignorada. Foque nas Questões 2 (interrupções) e 3 (assembly). A resolução da Q1 fica abaixo só como material para a P2.
+> **A Questão 1 (ThreadX/RTOS, 4 pts) está FORA do escopo da sua P1** e pode ser ignorada. Foque nas Questões 2 (interrupções) e 3 (assembly). A resolução da Q1 fica abaixo só como material para a P2. **Para a P2, use a versão refeita com a notação e as chamadas dos slides novos: [P2/Gabarito_Prova2022_Q1.md](../P2/Gabarito_Prova2022_Q1.md).**
 
 - **Não é o gabarito oficial.** É uma resolução construída com o material da pasta. Onde há mais de uma solução válida, aviso.
 - **Q1 (ThreadX, 4 pts)** exige conteúdo que **não está nos slides da pasta** (concorrência/RTOS). Usei o padrão ThreadX e o que existe nos slides de FSM (ISR → mensagem/evento → tarefa). Veja [Resumo §15](Resumo_P1.md#s15). Confirme se essa matéria cai na sua P1.

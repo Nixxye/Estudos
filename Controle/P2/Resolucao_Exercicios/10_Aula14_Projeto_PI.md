@@ -1,6 +1,6 @@
 # Aula 14: Exemplo completo de projeto de PI (G = 1/(s+12))
 
-**Origem:** `Exercicios_P2.pdf` págs. 50 a 57 (Aula 14, slides 3 a 10). É o modelo exato para a Q2 do Relatório 04.
+**Origem:** `Exercicios_P2.pdf` págs. 36 a 43 (Aula 14, slides 3 a 10). É o modelo exato para a Q2 do Relatório 04.
 
 ## Enunciado
 
@@ -15,7 +15,7 @@ Deseja-se que o sistema `G(s) = 1/(s+12)`, com realimentação unitária, tenha 
 - `ωd = 13,56·√(1 − 0,59²) = 10,9`.
 - Polos desejados: **`s₀ = −8 ± j10,9`**.
 
-**Passo 2: só P resolve?** Planta de 1ª ordem com P só tem **polo real** (nunca o par complexo −8 ± j10,9); e com P o erro seria `1/(1 + Kp/12) ≠ 0`. **PI necessário** (o polo em 0 zera o erro).
+**Passo 2: só P resolve?** Conferência pela **fase** em `s₀ = −8 + j10,9`. O único polo da planta, em −12, dá `tan⁻¹(10,9/4) = 69,8°` (o vetor `s₀ + 12 = 4 + j10,9` aponta para a direita e para cima). A fase de `K·G(s₀)` é **−69,8°**, e o lugar das raízes exige **−180°**: faltam **110,2°**, então `s₀` **não pertence** ao lugar (que é só o eixo real). Além disso, com P o erro seria `1/(1 + Kp/12) ≠ 0`. **PI necessário.** Conferindo o PI no passo seguinte: `−69,8° − 126,3° + 16,1° = −180°` ✔ (o polo em 0 soma 126,3° e o zero tira 16,1°).
 
 **Passo 3: condição de fase** (slides 5 e 6). `C·G = Kp(s+z)/(s(s+12))`. Ângulos até `s₀ = −8 + j10,9`:
 

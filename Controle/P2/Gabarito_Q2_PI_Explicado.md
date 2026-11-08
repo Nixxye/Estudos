@@ -40,7 +40,9 @@ Em termos de polos e zeros, ele acrescenta **um polo na origem** (o integrador) 
 
 **Conceito.** Com um controlador P, o polo de malha fechada percorre o **lugar das raízes de `K·G(s)`**. Aqui a planta é de **1ª ordem**, então o lugar é só uma semirreta do eixo real: **um polo real**, que **nunca** vai a um ponto complexo como `s₀`. Pela condição de fase: o ângulo do único polo até `s₀` é `110,1°`, e a condição pede `180°`: o alvo **não está no lugar**.
 
-**Na questão.** Com P, `T(s) = 3K/(s + 4 + 3K)`: um polo em `−(4 + 3K)`, sem overshoot. Dá para atender os dois requisitos numéricos do enunciado:
+**Na questão.** **Conferência pela fase (é o teste do passo 2).** Ângulo do único polo da planta (em −4) até `s₀ = −8 + j10,915`: o vetor `s₀ − (−4) = (−4, 10,915)` aponta para a esquerda e para cima, então `180° − tan⁻¹(10,915/4) = 180° − 69,9° = 110,1°`. A fase de `K·G(s₀)` é **−110,1°**, e o lugar das raízes exige **−180°**. Faltam **69,9°**, então `s₀` **não pertence** ao lugar de `K·G`: com `K > 0` a fase em `s₀` é sempre −110,1°, e nenhum ganho leva o polo até lá.
+
+Com P, `T(s) = 3K/(s + 4 + 3K)`: um polo em `−(4 + 3K)`, sem overshoot. Dá para atender os dois requisitos numéricos do enunciado:
 
 - ts = 0,5 s exige o polo em −8: `4 + 3K = 8` → `K = 4/3`; Mp = 0.
 

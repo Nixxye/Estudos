@@ -1,6 +1,6 @@
 # Aula 13: Exemplo completo de projeto de PD (G = 2/s²) e implementação com AmpOps
 
-**Origem:** `Exercicios_P2.pdf` págs. 36 a 49 (Aula 13, slides 6 a 19). É o modelo exato para a Q1 do Relatório 04 (mesmos passos, outra planta).
+**Origem:** `Exercicios_P2.pdf` págs. 22 a 35 (Aula 13, slides 6 a 19). É o modelo exato para a Q1 do Relatório 04 (mesmos passos, outra planta).
 
 ## Enunciado
 
@@ -15,7 +15,7 @@ Deseja-se que o sistema `G(s) = 2/s²`, com realimentação unitária, tenha **M
 - `ωd = ωn·√(1 − ζ²) = 2,174·√(1 − 0,46²) = 1,93`.
 - Polos desejados: **`s₀ = −1 ± j1,93`**.
 
-**Passo 2: só P resolve?** O lugar das raízes de `K·2/s²` é o **eixo imaginário** (polos duplos em 0): não passa por −1 + j1,93. **Não resolve → PD necessário.**
+**Passo 2: só P resolve?** Conferência pela **fase** em `s₀ = −1 + j1,93`. Cada polo em 0 (são dois) dá `180° − tan⁻¹(1,93/1) = 117,4°`, e os dois somam **234,8°**. A fase de `K·G(s₀)` é **−234,8°**, e o lugar das raízes exige **−180°**. Como `−234,8° ≠ −180°` (sobram **54,8°**), `s₀` **não pertence** ao lugar de `K·2/s²` (que é o eixo imaginário): nenhum ganho leva o polo até lá. **Não resolve → PD necessário.** O zero do PD fornece justamente esses 54,8° no passo seguinte.
 
 **Passo 3: condição de fase** (slide 8). `C·G = 2Kd(s+z)/s²`.
 
