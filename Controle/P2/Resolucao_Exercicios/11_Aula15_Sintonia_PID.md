@@ -140,21 +140,124 @@ Anulam-se `Ki` e `Kd`. Aumenta-se `Kp` até a oscilação **sem decaimento**. Es
 
 **Obter `Kcr` e `Tcr` pelo lugar das raízes** (slides 19 e 20): `rlocus` mostra o cruzamento com jω em `Kcr = 30` e `ωcr = 2,24 rad/s`, logo `Tcr = 2π/ωcr = 2,8 s`. O slide 20 confere simulando `K = 30` em malha fechada e medindo o período entre dois picos: `4,38 − 1,58 = 2,8 s`.
 
-**Obter analiticamente** (slides 21 e 22), **é o que cai na prova sem MATLAB:**
+#### Como obter `Kcr` e `ωcr` à mão (sem o lugar das raízes)
 
-1. Polinômio característico com só P: `s(s+1)(s+5) + Kp = s³ + 6s² + 5s + Kp = 0`.
-2. Routh:
+No slide 19, o professor usa o `rlocus` do MATLAB só para **ver o ponto em que o lugar cruza o eixo jω**. Esse ponto é exatamente o que a álgebra dá: nele, os polos de malha fechada são `±jωcr` e o ganho vale `Kcr`. Há **dois caminhos equivalentes**, ambos sem MATLAB: **Routh** (o que o professor faz nos slides 21 e 22) e a **substituição `s = jω`**.
+
+**Passo 0 (comum): montar o polinômio característico com só P.**
+
+Com `Ki = Kd = 0`, a malha fechada tem `1 + Kp·G(s) = 0`. Escrevendo `G(s) = N(s)/D(s)`:
+
+`D(s) + Kp·N(s) = 0`
+
+- Se `N(s)` for uma constante `c` (como `1` neste exemplo ou `10` na Q3), o termo `Kp` aparece multiplicado por `c`.
+- Se `N(s)` tiver zeros, ele entra inteiro no polinômio.
+
+No exemplo, `G = 1/(s(s+1)(s+5))`: `D = s(s+1)(s+5) = s³ + 6s² + 5s` e `N = 1`, então
+
+`s³ + 6s² + 5s + Kp = 0`.
+
+---
+
+**Método A: Routh (slides 21 e 22)**
+
+*Como montar a tabela* (para `s³ + a₂s² + a₁s + a₀`):
+
+| Linha | 1ª coluna | 2ª coluna |
+|---|---|---|
+| s³ | 1 | `a₁` |
+| s² | `a₂` | `a₀` |
+| s¹ | `b₁ = (a₂·a₁ − 1·a₀)/a₂` | 0 |
+| s⁰ | `a₀` | |
+
+Cada elemento novo é `(elemento da linha de baixo × elemento acima à direita − elemento da linha de cima × elemento abaixo à direita) ÷ elemento da linha de baixo`, na coluna da frente. No exemplo, `a₂ = 6`, `a₁ = 5`, `a₀ = Kp`:
 
 | Linha | 1ª coluna | 2ª coluna |
 |---|---|---|
 | s³ | 1 | 5 |
 | s² | 6 | Kp |
-| s¹ | `(30 − Kp)/6` | 0 |
+| s¹ | `(6·5 − Kp)/6 = (30 − Kp)/6` | 0 |
 | s⁰ | Kp | |
 
-3. **`Kcr`:** zera a linha s¹: `(30 − Kcr)/6 = 0` → **`Kcr = 30`**. (A linha s⁰ só dá `Kp = 0`, que não é solução com K > 0.)
-4. **`ωcr`:** equação auxiliar da linha s² com `Kp = 30`: `6s² + 30 = 0` → `s² = −5` → `s = ±j√5 =` **±j2,24**.
-5. **`Tcr = 2π/2,24 =` 2,8 s.**
+*Onde está `Kcr`:*
+
+1. O sistema fica estável enquanto **toda a 1ª coluna for positiva**: `1 > 0`, `6 > 0`, `(30 − Kp)/6 > 0` e `Kp > 0`.
+2. `Kcr` é o **primeiro `Kp > 0` que anula um elemento da 1ª coluna**. Aqui, o da linha s¹: `(30 − Kcr)/6 = 0` → **`Kcr = 30`**.
+3. A linha s⁰ só anularia em `Kp = 0`, que é o ponto de partida do lugar das raízes (o polo em 0 da planta), não um cruzamento.
+
+*Onde está `ωcr`:*
+
+4. Com `Kp = Kcr`, a linha s¹ zera inteira. A **equação auxiliar** vem da **linha de cima** (a s²), com os coeficientes como termos de potência par: `6s² + Kp = 6s² + 30 = 0`.
+5. `s² = −30/6 = −5`, então `s = ±j√5` e **`ωcr = √5 = 2,236 rad/s`**.
+6. **`Tcr = 2π/ωcr = 2π/2,236 = 2,81 s ≈ 2,8 s`.**
+
+*Atalho para polinômio de 3º grau* `s³ + a₂s² + a₁s + c·Kp` (com `c` = ganho do numerador): o elemento da linha s¹ é `(a₂a₁ − c·Kp)/a₂`, que zera em
+
+**`Kcr = a₂·a₁ / c`** e **`ωcr = √a₁`**.
+
+| Caso | `a₂` | `a₁` | `c` | `Kcr = a₂a₁/c` | `ωcr = √a₁` |
+|---|---|---|---|---|---|
+| Slide: `1/(s(s+1)(s+5))` | 6 | 5 | 1 | **30** | **2,236** |
+| Q3: `10/(s(s+10)(s+6))` | 16 | 60 | 10 | **96** | **7,746** |
+
+---
+
+**Método B: substituir `s = jω` (sem tabela)**
+
+Se o sistema oscila sem decaimento, os polos estão em `s = jωcr`. Então o polinômio característico **tem que se anular** nesse ponto. Substituindo `s = jω` em `s³ + 6s² + 5s + Kp`:
+
+- `(jω)³ = −jω³`, `(jω)² = −ω²`, então `−jω³ − 6ω² + 5jω + Kp = 0`.
+- Agrupando: **`(Kp − 6ω²) + j(5ω − ω³) = 0`**.
+
+Um número complexo só é zero se a **parte real e a parte imaginária** forem zero:
+
+- **Parte imaginária:** `5ω − ω³ = ω(5 − ω²) = 0` → `ω = 0` (descartada, é o polo em 0) ou **`ω² = 5`** → `ωcr = √5 = 2,236`.
+- **Parte real:** `Kp − 6ω² = 0` → `Kp = 6·5 =` **30**.
+
+Mesmo resultado do Routh: `Kcr = 30`, `ωcr = 2,236`. Em polinômios de grau maior, o Routh costuma ser mais organizado; para o 3º grau, a substituição é igualmente curta.
+
+---
+
+**Conferência (vale para os dois métodos)**
+
+1. **Substitua `s = jωcr` e `Kp = Kcr` no polinômio:** `−j(2,236)³ − 6(5) + 5j(2,236) + 30 = −j11,18 − 30 + j11,18 + 30 = 0` ✔.
+2. **Os outros polos devem estar no semiplano esquerdo.** A soma das raízes de `s³ + 6s² + ...` é `−6`; com `±j2,236` somando 0, o terceiro polo é **−6**, estável ✔.
+3. **Se tiver MATLAB**, o `rlocus` mostra o cruzamento em `±j2,24` com ganho 30, como no slide 19.
+
+---
+
+**Segundo exemplo (extra meu, 4ª ordem): `G = 1/((s+1)(s+2)(s+3)(s+4))`**
+
+`D(s) = (s+1)(s+2)(s+3)(s+4) = s⁴ + 10s³ + 35s² + 50s + 24`, então o polinômio característico é `s⁴ + 10s³ + 35s² + 50s + (24 + Kp) = 0`.
+
+| Linha | 1ª coluna | 2ª coluna | 3ª coluna |
+|---|---|---|---|
+| s⁴ | 1 | 35 | 24 + Kp |
+| s³ | 10 | 50 | 0 |
+| s² | `(10·35 − 50)/10 = 30` | `(10(24+Kp) − 0)/10 = 24 + Kp` | |
+| s¹ | `(30·50 − 10(24+Kp))/30 = (1260 − 10Kp)/30` | 0 | |
+| s⁰ | 24 + Kp | | |
+
+- `Kcr`: zera a linha s¹: `1260 − 10Kcr = 0` → **`Kcr = 126`**.
+- Equação auxiliar (linha s², a de cima): `30s² + (24 + 126) = 30s² + 150 = 0` → `s² = −5` → **`ωcr = √5 = 2,236`**.
+- `Tcr = 2π/2,236 =` **2,81 s**.
+- Conferência por `s = jω`: parte imaginária `−10ω³ + 50ω = 0` → `ω² = 5`; parte real `ω⁴ − 35ω² + 24 + Kp = 0` → `25 − 175 + 24 + Kp = 0` → `Kp = 126` ✔. As raízes do polinômio com `Kp = 126` são `±j2,236` e `−5 ± j2,236` (conferido numericamente).
+- Tabela ZN: `Kp = 0,6·126 = 75,6`, `Ti = 0,5·2,81 = 1,40` → `Ki = 53,8`, `Td = 2,81/8 = 0,35` → `Kd = 26,5`.
+
+---
+
+**Armadilhas**
+
+| Situação | O que fazer |
+|---|---|
+| Linha s¹ (ou outra) zera **inteira** com `s²` ≠ 0 | há um par `±jω`: use a equação auxiliar da linha de **cima** |
+| Só o `s⁰` zera | é raiz em `s = 0` (aqui acontece em `Kp = 0`), não é `Kcr` |
+| Vários `Kp` anulam a coluna | `Kcr` é o **menor `Kp > 0`** (o primeiro cruzamento) |
+| O polinômio tem `Kp` multiplicado por `c` ≠ 1 | `c·Kp` entra no lugar de `Kp`; ao isolar, divida por `c` |
+| A equação auxiliar dá `s² = positivo` | não há par imaginário; confira as contas |
+| `ωcr` em rad/s | `Tcr = 2π/ωcr` em segundos |
+
+**Resumo:** monte `D(s) + Kp·N(s)`; ache o `Kp` que anula a linha s¹ (ou use `s = jω`); `ωcr` sai da equação auxiliar (ou da parte imaginária); `Tcr = 2π/ωcr`.
 
 **Aplicar a tabela** (slide 23):
 

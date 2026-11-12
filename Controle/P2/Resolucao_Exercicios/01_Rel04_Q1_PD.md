@@ -106,6 +106,58 @@ Conferência na figura: `33,7° − (121,1° + 52,9° + 39,6°) = 33,7° − 213
 
 Em palavras: o ganho é o produto das distâncias de `s₀` aos polos, dividido pelo produto das distâncias aos zeros e pelo ganho da planta.
 
+**Como se chega nessa expressão, fator por fator.**
+
+*Origem da condição.* A equação característica de malha fechada é `1 + C(s)G(s) = 0`. Em um polo `s₀`, isso significa `C(s₀)G(s₀) = −1`. O número `−1` tem **módulo 1** e **ângulo 180°**, e são essas as duas condições: o ângulo é o passo 3, e o módulo é este passo.
+
+*1. Escreva `C(s)` e `G(s)` por extenso.*
+
+- `C(s) = Kd·(s + z)` (o PD escrito com o zero).
+- `G(s) = 2 / ( s·(s + 12)·(s + 9) )`.
+
+*2. Multiplique `C(s)·G(s)` (numerador com numerador, denominador com denominador).*
+
+`C(s)·G(s) = Kd·(s + z) · 2 / ( s·(s+12)·(s+9) ) = 2·Kd·(s + z) / ( s·(s+9)·(s+12) )`
+
+Os números `2` e `Kd` e o fator `(s + z)` ficam em cima; os três fatores dos polos ficam embaixo.
+
+*3. Calcule em `s = s₀`.* Cada `s` vira `s₀`:
+
+`C(s₀)·G(s₀) = 2·Kd·(s₀ + z) / ( s₀·(s₀+9)·(s₀+12) )`
+
+Aqui `s₀ = −4 + j6,624` é um número complexo, então `s₀ + z`, `s₀`, `s₀ + 9` e `s₀ + 12` são todos números complexos (vetores), e o resultado é um complexo também.
+
+*4. Tire o módulo dos dois lados.* O módulo de um produto é o produto dos módulos, e o de um quociente é o quociente dos módulos:
+
+`|a·b/(c·d·e)| = |a|·|b| / ( |c|·|d|·|e| )`
+
+Aplicando: `|2| = 2` e `|Kd| = Kd` (reais positivos), e cada fator complexo vira a distância:
+
+`|C(s₀)G(s₀)| = 2·Kd·|s₀ + z| / ( |s₀|·|s₀+9|·|s₀+12| )`
+
+*5. Iguale a 1* (a condição de módulo):
+
+`2·Kd·|s₀ + z| / ( |s₀|·|s₀+9|·|s₀+12| ) = 1`
+
+É a mesma expressão do começo (`Kd · |s₀ + z| · 2 / ( |s₀|·|s₀+9|·|s₀+12| ) = 1`); só mudei a ordem dos fatores no numerador, que não altera o produto.
+
+*6. Isole `Kd`:* multiplique os dois lados pelo denominador e divida por `2·|s₀ + z|`:
+
+`Kd = |s₀|·|s₀+9|·|s₀+12| / ( 2·|s₀ + z| )`
+
+(É por isso que as distâncias aos **polos** ficam em cima e as distâncias aos **zeros**, junto com o ganho da planta, ficam embaixo.)
+
+*7. Cada módulo é uma distância (Pitágoras).* Com `s₀ = −4 + j6,624` e `z = 13,94`:
+
+| Fator | Número complexo | Módulo |
+|---|---|---|
+| `s₀` | `−4 + j6,624` | `√(4² + 6,624²) = √(16 + 43,9) = 7,74` |
+| `s₀ + 9` | `5 + j6,624` | `√(25 + 43,9) = 8,30` |
+| `s₀ + 12` | `8 + j6,624` | `√(64 + 43,9) = 10,39` |
+| `s₀ + z` | `9,94 + j6,624` | `√(98,8 + 43,9) = 11,94` |
+
+(`s₀ + 9`: `−4 + 9 = 5`; `s₀ + 12`: `−4 + 12 = 8`; `s₀ + 13,94`: `−4 + 13,94 = 9,94`. A parte imaginária `6,624` não muda nos quatro.)
+
 **Na questão.** As distâncias de `s₀ = −4 + j6,624`:
 
 | Distância | Conta | Valor |
