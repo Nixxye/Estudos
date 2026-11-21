@@ -2,18 +2,21 @@
 
 Complemento do [Resumo_P2.md](Resumo_P2.md). Aqui o foco é **escalonamento de tempo real**: como atribuir prioridades e **provar** (ou testar) que os prazos serão cumpridos.
 
-## Aviso importante: o que está e o que não está nos slides
+## Aviso importante: este documento foi escrito ANTES dos slides de escalonamento
 
-Os três PDFs da P2 (`13_concurrency`, `13_mutual_exclusion`, `14_t threadx_rtos`) **não trazem** escalonamento de tempo real. Só aparecem:
+Quando escrevi este resumo, a pasta só tinha 3 PDFs. Depois você adicionou **`15_scheduling_v_oct_2023.pdf`** (o deck de escalonamento do professor, 52 slides). **O conteúdo fiel dos slides está no [Compilado_P2.md](Compilado_P2.md), seção 4 e guias G1 a G3: use aquele como referência principal.**
 
-| No slide | O quê |
-|---|---|
-| conc 13.13, 13.16 | escalonamento é o **4º problema** do ambiente multitarefa; RTOS **preemptivo por prioridade** |
-| conc 13.14 | "deadlocks e **inversão de prioridade**" citados como riscos |
-| tx 14.29 | prioridades do ThreadX (0 = maior), FIFO, time-slice, *preempt threshold*, **herança de prioridade** nos mutexes |
-| tx 14.32, 14.54-14.55 | mutex com **`TX_INHERIT`** |
+Diferenças entre este resumo e o professor:
 
-**Todo o resto deste documento é 🧩 (material complementar, não está nos slides).** Ele segue a teoria clássica (Liu & Layland, Sha et al., Buttazzo). Confirme com o professor **o quanto disso cai**, e use o **Lab 6** como guia: ele mostra o que o professor trabalha na prática (time-slice, preempção, mutex com e sem herança).
+| Assunto | Neste resumo (teoria geral) | No slide do professor |
+|---|---|---|
+| Teste exato do RM | **análise do tempo de resposta** (iteração `R = C + Σ⌈R/T⌉C`) | **Teorema 3** (pontos de escalonamento `(k,l)`, mínimo ≤ 1), sch 15.26-15.29 |
+| Teste exato com bloqueio | RTA com B_i | **fórmula com B_i/(l·T_k)**, sch 15.40-15.42 |
+| Prioridade | **0 = maior** (ThreadX) | **número maior = maior** (sch 15.18) |
+| Notação de desenho | texto | **Gantt do professor**, sch 15.6-15.7 |
+| Protocolos | PIP, PCP, ICPP, SRP | **PIP e PCP** (regras do PCP em sch 15.36) |
+
+Os dois testes exatos (RTA e Teorema 3) **dão a mesma conclusão** para RM com D = T; na prova use **o do professor**. O que é útil aqui: o exemplo das tarefas do **Lab 6**, o **ICPP/SRP** e as notas sobre o **ThreadX**. O que o resumo traz além do deck está marcado com 🧩.
 
 ## Índice
 
